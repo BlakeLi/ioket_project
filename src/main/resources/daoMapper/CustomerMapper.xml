@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ietok.project.dao.CustomerDao">
+    <insert id="addCustomer">
+        insert into HRM_CUSTOMER (C_ACCOUNT,C_PASS) values (#{c_account},#{c_pass})
+    </insert>
+    <select id="getCustomer" resultType="com.ietok.project.entity.Customer">
+        select * from HRM_CUSTOMER where C_ACCOUNT = #{c_account} and C_PASS = #{c_pass}
+    </select>
+</mapper>
