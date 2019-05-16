@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ietok.project.dao.EmployeeDao">
+    <insert id="addEmployee">
+        insert into HRM_EMPLOYEE (E_ACCOUNT, E_PASS, E_TYPE, E_NAME, E_GENDER, E_ADDRESS, E_PHONE, E_DEBIT, E_ENROLL_DATE, E_STATE, E_SALARY,POS_ID)
+                          values (#{e_account},#{e_pass},#{e_type},#{e_name},#{e_gender},#{e_address},#{e_phone},#{e_debit},sysdate,0,#{e_salary},#{pos_id})
+    </insert>
+    <update id="updateEmployee">
+        update HRM_EMPLOYEE set
+                                E_ACCOUNT = #{e_account},
+                                E_PASS = #{e_pass},
+                                E_TYPE = #{e_type},
+                                E_NAME = #{e_name},
+                                E_GENDER = #{e_gender},
+                                E_ADDRESS = #{e_address},
+                                E_PHONE = #{e_phone},
+                                E_DEBIT = #{e_debit},
+                                E_ENROLL_DATE = #{e_enroll_date},
+                                E_STATE = #{e_state},
+                                E_SALARY = #{e_salary},
+                                POS_ID = #{pos_id}
+        where E_ID = #{e_id}
+    </update>
+    <delete id="delEmployee">
+        delete from HRM_EMPLOYEE where E_ID = #{e_id}
+    </delete>
+    <select id="getEmployee" resultType="com.ietok.project.entity.Employee">
+        select * from HRM_EMPLOYEE where E_ID = #{e_id}
+    </select>
+</mapper>

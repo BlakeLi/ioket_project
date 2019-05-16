@@ -13,7 +13,6 @@ public class CustomerServiceImplz implements CustomerService {
     @Resource
     private CustomerDao customerDao;
 
-    @Transactional
     @Override
     public boolean addCustomer(String name, String pass) {
         if(name==null||pass==null){
@@ -22,11 +21,9 @@ public class CustomerServiceImplz implements CustomerService {
         Customer customer = new Customer();
         customer.setC_account(name);
         customer.setC_pass(name);
-        System.out.println(customerDao);
         return customerDao.addCustomer(customer);
     }
 
-    @Transactional
     @Override
     public Customer getCustomer(String name, String pass) {
         if(name==null||pass==null){

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ietok.project.dao.CvDao">
+    <insert id="addCv">
+        insert into HRM_CV
+                (C_ID,CV_NAME,CV_GENDER,CV_BIRTH,CV_ADDRESS,CV_SCHOOL,CV_EDUCATION,CV_MAJOR,CV_ENROLL_DATE,CV_GRADUATION_DATE,CV_SALARY,CV_EXPERIENCE)
+        values  (#{c_id},#{cv_name},#{cv_gender},#{cv_birth},#{cv_address},#{cv_school},#{cv_education},#{cv_major},#{cv_enroll_date},#{cv_graduation_date},#{cv_salary},#{cv_experience})
+    </insert>
+    <update id="updateCv">
+        update HRM_CV set
+                          C_ID = #{c_id},
+                          CV_name = #{cv_name},
+                          CV_GENDER = #{cv_gender},
+                          CV_BIRTH = #{cv_birth},
+                          CV_ADDRESS = #{cv_address},
+                          CV_SCHOOL = #{cv_school},
+                          CV_EDUCATION = #{cv_education},
+                          CV_MAJOR = #{cv_major},
+                          CV_ENROLL_DATE = #{cv_enroll_date},
+                          CV_GRADUATION_DATE = #{cv_graduation_date},
+                          CV_SALARY = #{cv_salary},
+                          CV_EXPERIENCE =#{cv_experience}
+        where CV_ID = #{cv_id}
+    </update>
+    <delete id="delCv">
+        delete from HRM_CV where CV_ID = #{cv_id}
+    </delete>
+    <select id="getCv" resultType="com.ietok.project.entity.Cv">
+        select * from HRM_CV where CV_ID = #{cv_id}
+    </select>
+    <select id="getCvs" resultType="com.ietok.project.entity.Cv">
+        select * from HRM_CV where C_ID = #{c_id}
+    </select>
+</mapper>

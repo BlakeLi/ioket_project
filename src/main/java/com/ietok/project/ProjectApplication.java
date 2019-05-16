@@ -7,7 +7,8 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @SpringBootApplication
 @MapperScan("com.ietok.project.dao")
-@EnableTransactionManagement
+//事务触发器
+//@EnableTransactionManagement
 public class ProjectApplication {
 
     public static void main(String[] args) {

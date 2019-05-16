@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ietok.project.dao.DepartmentDao">
+    <insert id="addDep">
+        insert into HRM_DEPARTMENT (DEP_NAME, DEP_DATE)
+        values (${dep_name},sysdate)
+    </insert>
+    <update id="updateDep">
+        update HRM_DEPARTMENT set DEP_NAME = #{dep_name} where DEP_ID =#{dep_id}
+    </update>
+    <delete id="delDep">
+        delete from HRM_DEPARTMENT where DEP_ID=#{dep_id}
+    </delete>
+    <select id="getDepartments" resultType="com.ietok.project.entity.Department">
+        select * from HRM_DEPARTMENT
+    </select>
+
+</mapper>
