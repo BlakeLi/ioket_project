@@ -24,7 +24,7 @@
         select * from HRM_FTFS where F_ID = #{f_id}
     </select>
     <select id="getFifssByCv_id" resultType="com.ietok.project.entity.Fifs">
-        select * from HRM_FTFS where CV_ID = #{cv_id} and F_IS_ACCEPT = 1
+        select * from HRM_FTFS where CV_ID = #{cv_id}
     </select>
     <select id="getFifssByRCT_id" resultType="com.ietok.project.entity.Fifs">
         select * from HRM_FTFS where RCT_ID =#{rct_id}

@@ -10,9 +10,11 @@ import com.ietok.project.service.service.FifsService;
 import com.ietok.project.service.service.RecruitService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpSession;
+import java.util.ArrayList;
 import java.util.List;
 /**
 * 这个controller主要包括游客的所有主要功能，和游客相关的展示信息的查询功能
@@ -52,11 +54,29 @@ public class CustomerServlets {
     @RequestMapping("loginCustomer")
     public String loginCustomer(String name,String pass,HttpSession session){
         Customer customer = customerService.getCustomer(name,pass);
-        if(customer!=null){
+        if(customer!=null&&customer.getC_id()!=null){
+            List<Cv> cvs = cvService.getCvs(customer.getC_id());
+            List<Fifs> fifsByC_id = fifsService.getFifsByC_id(customer.getC_id());
+
+            System.out.println(fifsByC_id);
+            List<Fifs> acceptF = new ArrayList<>();
+            List<Fifs> agreeF = new ArrayList<>();
+            for (Fifs fifs : fifsByC_id) {
+                if(fifs.getF_is_accept()==0){
+                    acceptF.add(fifs);
+                }else if(fifs.getF_is_agree()==0){
+                    agreeF.add(fifs);
+                }
+            }
             session.setAttribute("customer",customer);
-            return "WEB-INF/test/success";
+            session.setAttribute("acceptF",acceptF);
+            System.out.println(acceptF);
+            System.out.println(agreeF);
+            session.setAttribute("agreeF",agreeF);
+            session.setAttribute("cvs",cvs);
+            return "customer";
         }
-        return "WEB-INF/test/fail";
+        return "index";
     }
 
     //公布招聘信息获得控制器
@@ -69,77 +89,129 @@ public class CustomerServlets {
 
     //简历添加控制器
     @RequestMapping("addCv")
-    public String addCv(Cv cv){
+    public String addCv(Cv cv,HttpSession session){
         if(cvService.addCv(cv)){
-            return "WEB-INF/test/success";
+            Customer customer = (Customer) session.getAttribute("customer");
+            List<Cv> cvs = cvService.getCvs(customer.getC_id());
+            session.setAttribute("cvs",cvs);
         }
-        return "WEB-INF/test/fail";
+        return "customer";
     }
 
-    //简历展示控制器（游客ID查询）
-    @RequestMapping("getCvs")
-    public String getCvs(HttpSession session){
-        List<Cv> cvs = cvService.getCvs(1);
-        session.setAttribute("cvs",cvs);
-        return "index";
-    }
-
-    //简历选择控制器
+    //获得简历控制器
     @RequestMapping("getCv")
-    public String getCv(HttpSession session){
-        Cv cv = cvService.getCv(1);
-        session.setAttribute("cv",cv);
-        return "index";
+    @ResponseBody
+    public Cv getCv(String cv_id){
+        return cvService.getCv(Integer.parseInt(cv_id));
+    }
+
+    //简历删除控制器
+    @RequestMapping("delCv")
+    public String delCv(String cv_id,HttpSession session){
+        if(cvService.delCv(Integer.parseInt(cv_id))){
+            Customer customer = (Customer) session.getAttribute("customer");
+            List<Cv> cvs = cvService.getCvs(customer.getC_id());
+            session.setAttribute("cvs",cvs);
+        }
+        return "customer";
     }
 
     //简历修改控制器
     @RequestMapping("updateCv")
-    public String getCv(Cv cv){
+    public String updateCv(Cv cv,HttpSession session){
+        Customer customer = (Customer) session.getAttribute("customer");
+        cv.setC_id(customer.getC_id());
         if(cvService.update(cv)){
-            return "WEB-INF/test/success";
+            List<Cv> cvs = cvService.getCvs(customer.getC_id());
+            session.setAttribute("cvs",cvs);
         }
-        return "WEB-INF/test/fail";
+        return "customer";
     }
 
     //申请面试
     @RequestMapping("addFifs")
-    public String addFifs(Fifs fifs){
-        if(fifsService.addFifs(fifs)){
-            return "WEB-INF/test/success";
+    public String addFifs(Fifs fifs,HttpSession session){
+        Cv cv = cvService.getCv(fifs.getCv_id());
+        Customer customer = (Customer) session.getAttribute("customer");
+        List<Fifs> acceptF = new ArrayList<>();
+        List<Fifs> agreeF = new ArrayList<>();
+        if(cv == null){
+            return "customer";
         }
-        return "WEB-INF/test/fail";
+        if(fifsService.addFifs(fifs)){
+            List<Fifs> fifsByC_id = fifsService.getFifsByC_id(customer.getC_id());
+            for (Fifs fifss : fifsByC_id) {
+                if(fifss.getF_is_accept()==0){
+                    acceptF.add(fifss);
+                }else if(fifss.getF_is_agree()==0){
+                    agreeF.add(fifss);
+                }
+            }
+            session.setAttribute("acceptF",acceptF);
+            session.setAttribute("agreeF",agreeF);
+        }
+        return "customer";
     }
 
     //同意面试申请
     @RequestMapping("agreeFifs")
-    public String updateFifs(Fifs fifs, String agree){
+    public String updateFifs(Fifs fifs, String agree,HttpSession session){
+        Customer customer = (Customer) session.getAttribute("customer");
+        List<Fifs> acceptF = new ArrayList<>();
+        List<Fifs> agreeF = new ArrayList<>();
         if(fifs!=null&&fifs.getF_id()!=null&&agree!=null){
             Fifs ffs = fifsService.getFifsByID(fifs.getF_id());
             if(Integer.parseInt(agree)==0){
                 if(fifsService.delFifs(fifs)){
                     System.out.println("已经删除拒绝的面试申请");
-                    return "WEB-INF/test/success";
+                    List<Fifs> fifsByC_id = fifsService.getFifsByC_id(customer.getC_id());
+                    for (Fifs fifss : fifsByC_id) {
+                        if(fifss.getF_is_accept()==0){
+                            acceptF.add(fifss);
+                        }else if(fifss.getF_is_agree()==0){
+                            agreeF.add(fifss);
+                        }
+                    }
+                    session.setAttribute("acceptF",acceptF);
+                    session.setAttribute("agreeF",agreeF);
+                    return "customer";
                 }
             }
             ffs.setF_is_agree(1);
             if(fifsService.updateFifs(ffs)){
-                return "WEB-INF/test/success";
+                List<Fifs> fifsByC_id = fifsService.getFifsByC_id(customer.getC_id());
+                for (Fifs fifss : fifsByC_id) {
+                    if(fifss.getF_is_accept()==0){
+                        acceptF.add(fifss);
+                    }else if(fifss.getF_is_agree()==0){
+                        agreeF.add(fifss);
+                    }
+                }
+                session.setAttribute("acceptF",acceptF);
+                session.setAttribute("agreeF",agreeF);
             }
         }
-        return "WEB-INF/test/fail";
+        return "customer";
     }
 
-    //查看所有已经同意的面试申请
-    @RequestMapping("getFifsByAccept")
-    public String getFifsByAccept(String c_id,HttpSession session){
-        if(c_id!=null){
-            List<Fifs> fifss = fifsService.getFifsByC_id(Integer.parseInt(c_id));
-            if(fifss.size()!=0){
-                session.setAttribute("fifsAccept",fifss);
-                return "WEB-INF/test/success";
+    //取消面试申请
+    @RequestMapping("delFifs")
+    public String delFifs(Fifs fifs,HttpSession session){
+        Customer customer = (Customer) session.getAttribute("customer");
+        List<Fifs> acceptF = new ArrayList<>();
+        List<Fifs> agreeF = new ArrayList<>();
+        if(fifsService.delFifs(fifs)){
+            List<Fifs> fifsByC_id = fifsService.getFifsByC_id(customer.getC_id());
+            for (Fifs fifss : fifsByC_id) {
+                if(fifss.getF_is_accept()==0){
+                    acceptF.add(fifss);
+                }else if(fifss.getF_is_agree()==0){
+                    agreeF.add(fifss);
+                }
             }
+            session.setAttribute("acceptF",acceptF);
+            session.setAttribute("agreeF",agreeF);
         }
-
-        return "WEB-INF/test/fail";
+        return "customer";
     }
 }

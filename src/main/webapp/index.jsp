@@ -170,10 +170,15 @@
         var input_name = $("input[name='name']");
         var input_pass = $("input[name='pass']");
         var input_pass2= $("input[name='pass2_input']");
-        if(reg_name.test(input_name.val())&&input_pass.val()===input_pass2.val()){
-            modal.find(".modal-body form").submit();
+        if(input_name.val()===""||input_pass.val()===""){
+            return;
         }
-    })
+        if(reg_name.test(input_name.val())&&input_pass.val()===input_pass2.val()){
+            modal.find(".modal-body form[action='registerCustomer']").submit();
+            return;
+        }
+        modal.find(".modal-body form[action='loginCustomer']").submit();
+    });
 </script>
 </body>
 </html>
