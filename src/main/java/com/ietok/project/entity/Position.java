@@ -3,7 +3,6 @@ package com.ietok.project.entity;
 public class Position {
     private Integer pos_id;
     private Integer dep_id;
-    private Integer e_id;
     private String pos_name;
 
     public Integer getPos_id() {
@@ -22,14 +21,6 @@ public class Position {
         this.dep_id = dep_id;
     }
 
-    public Integer getE_id() {
-        return e_id;
-    }
-
-    public void setE_id(Integer e_id) {
-        this.e_id = e_id;
-    }
-
     public String getPos_name() {
         return pos_name;
     }
@@ -43,7 +34,6 @@ public class Position {
         return "Position{" +
                 "pos_id=" + pos_id +
                 ", dep_id=" + dep_id +
-                ", e_id=" + e_id +
                 ", pos_name='" + pos_name + '\'' +
                 '}';
     }

@@ -29,4 +29,7 @@
     <select id="getEmployee" resultType="com.ietok.project.entity.Employee">
         select * from HRM_EMPLOYEE where E_ID = #{e_id}
     </select>
+    <select id="getEmployeesByPosID" resultType="com.ietok.project.entity.Employee">
+        select * from HRM_EMPLOYEE where POS_ID = #{pos_id}
+    </select>
 </mapper>

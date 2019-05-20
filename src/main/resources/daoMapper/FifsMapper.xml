@@ -17,10 +17,16 @@
                             F_IS_AGREE = #{f_is_agree}
         where F_ID = #{f_id}
     </update>
+    <delete id="delFifs">
+        delete from HRM_FTFS where F_ID = #{f_id}
+    </delete>
     <select id="getFifs" resultType="com.ietok.project.entity.Fifs">
-        select * from HRM_FTFS where CV_ID = #{cv_id}
+        select * from HRM_FTFS where F_ID = #{f_id}
     </select>
-    <select id="getFifss" resultType="com.ietok.project.entity.Fifs">
-        select * from HRM_FTFS where F_IS_READ = #{f_is_read};
+    <select id="getFifssByCv_id" resultType="com.ietok.project.entity.Fifs">
+        select * from HRM_FTFS where CV_ID = #{cv_id} and F_IS_ACCEPT = 1
+    </select>
+    <select id="getFifssByRCT_id" resultType="com.ietok.project.entity.Fifs">
+        select * from HRM_FTFS where RCT_ID =#{rct_id}
     </select>
 </mapper>

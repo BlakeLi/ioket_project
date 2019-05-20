@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ietok.project.dao.SalaryDao">
+
+    <insert id="addSalary">
+        insert into HRM_SALARY (E_ID, S_DATE, S_PERFORMANCE, S_EXTRA, S_REWARD, S_S_INSURANCE, S_TOTAL, S_IS_TROUBLE)
+                        values (#{e_id},sysdate,#{s_performance},#{s_extra},#{s_reward},#{s_s_insurance},#{s_total},0)
+    </insert>
+    <update id="updateSalary">
+        update HRM_SALARY set S_IS_TROUBLE = #{s_is_trouble} where S_ID = #{s_id}
+    </update>
+    <select id="getSalaryByTrouble" resultType="com.ietok.project.entity.Salary">
+        select * from HRM_SALARY where S_IS_TROUBLE = 1;
+    </select>
+    <select id="getSalary" resultType="com.ietok.project.entity.Salary">
+        select * from HRM_SALARY where S_ID = #{s_id};
+    </select>
+    <select id="getSalarysByDateAndE_id" resultType="com.ietok.project.entity.Salary">
+        select * from HRM_SALARY where E_ID = #{e_id} and months_between(sysdate,S_DATE)=0
+    </select>
+
+</mapper>

@@ -1,16 +1,15 @@
-package com.ietok.project.dao;
+package com.ietok.project.service.service;
 
 import com.ietok.project.entity.Position;
 
 import java.util.List;
 
-public interface PositionDao {
+public interface PositionService {
     boolean addPosition(Position position);
-    boolean delPositionByDep(Position position);
-    boolean delPosition(Position position);
+    boolean delPosition(Integer pos_id);
+    boolean delPositionByDep(Integer dep_id);
     boolean updatePosition(Position position);
 
-    Position getPositionByNameAndDep(Position position);
     Position getPositionByID(Position position);
     List<Position> getPositionByDep(Position position);
 }

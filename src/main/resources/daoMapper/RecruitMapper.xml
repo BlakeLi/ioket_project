@@ -3,7 +3,29 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ietok.project.dao.RecruitDao">
+    <insert id="addRecruit">
+        insert into HRM_RECRUIT (POS_ID, RCT_TITLE, RCT_INTRODUCTION, RCT_PUBLISH_TIME, RCT_ADDRESS, RCT_SALARY, E_ID, RCT_IS_DRAFT)
+                          values (#{pos_id},#{rct_title},#{rct_introduction},null,#{rct_address},#{rct_salary},#{e_id},1)
+    </insert>
+    <update id="updateRecruit">
+        update HRM_RECRUIT set
+                               POS_ID = #{pos_id},
+                               RCT_TITLE = #{rct_title},
+                               RCT_INTRODUCTION = #{rct_introduction},
+                               RCT_PUBLISH_TIME = #{rct_publish_time},
+                               RCT_ADDRESS = #{rct_address},
+                               RCT_SALARY = #{rct_salary},
+                               E_ID = #{e_id},
+                               RCT_IS_DRAFT = #{rct_is_draft}
+        where RCT_ID = #{rct_id}
+    </update>
+    <delete id="deleteRecruit">
+        delete from HRM_RECRUIT where RCT_ID=#{rct_id}
+    </delete>
     <select id="getPublishedRecruit" resultType="com.ietok.project.entity.Recruit">
-        select * from HRM_RECRUIT where RCT_IS_PUBLISH = 1
+        select * from HRM_RECRUIT where RCT_IS_DRAFT = 0
+    </select>
+    <select id="getRecruitByID" resultType="com.ietok.project.entity.Recruit">
+        select * from HRM_RECRUIT where RCT_ID=#{rct_id}
     </select>
 </mapper>

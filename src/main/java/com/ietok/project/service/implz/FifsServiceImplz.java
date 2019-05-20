@@ -1,17 +1,25 @@
 package com.ietok.project.service.implz;
 
+import com.ietok.project.dao.CvDao;
 import com.ietok.project.dao.FifsDao;
+import com.ietok.project.entity.Cv;
 import com.ietok.project.entity.Fifs;
 import com.ietok.project.service.service.FifsService;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service("fifsService")
 public class FifsServiceImplz implements FifsService {
+
     @Resource
     private FifsDao fifsDao;
+    @Resource
+    private CvDao cvDao;
+
     @Override
     public boolean addFifs(Fifs fifs) {
         if(fifs==null){
@@ -28,15 +36,39 @@ public class FifsServiceImplz implements FifsService {
         return fifsDao.updateFifs(fifs);
     }
 
-    //待定
     @Override
-    public Fifs getFifs(Integer cv_id) {
-            return null;
+    public boolean delFifs(Fifs fifs) {
+        if(fifs==null){
+            return false;
+        }
+        return fifsDao.delFifs(fifs);
     }
 
-    //待定
     @Override
-    public List<Fifs> getFifss(Integer F_is_read) {
-        return null;
+    public Fifs getFifsByID(Integer f_id) {
+        if(f_id==null){
+            return null;
+        }
+        Fifs fifs = new Fifs();
+        fifs.setF_id(f_id);
+        return fifsDao.getFifs(fifs);
+    }
+
+    //通过c_id找出所有cv，通过cv_id找出所有fifs整合并输出
+    @Override
+    public List<Fifs> getFifsByC_id(Integer c_id) {
+        if(c_id==null){
+            return null;
+        }
+        Cv cv = new Cv();
+        cv.setC_id(c_id);
+        List<Fifs> fifss = new ArrayList<>();
+        List<Cv> cvs = cvDao.getCvs(cv);
+        for (Cv cv1 : cvs) {
+            Fifs fifs = new Fifs();
+            fifs.setCv_id(cv1.getCv_id());
+            fifss.addAll(fifsDao.getFifssByCv_id(fifs));
+        }
+        return fifss;
     }
 }

@@ -23,8 +23,6 @@ public class Recruit implements Serializable {
     private Integer e_id;
     //是否是草稿（0不是，1是）
     private Integer rct_is_draft;
-    //是否已经发布（0没发布，1已发布）
-    private Integer rct_is_publish;
 
     public Integer getRct_id() {
         return rct_id;
@@ -97,15 +95,6 @@ public class Recruit implements Serializable {
     public void setRct_is_draft(Integer rct_is_draft) {
         this.rct_is_draft = rct_is_draft;
     }
-
-    public Integer getRct_is_publish() {
-        return rct_is_publish;
-    }
-
-    public void setRct_is_publish(Integer rct_is_publish) {
-        this.rct_is_publish = rct_is_publish;
-    }
-
     @Override
     public String toString() {
         return "Recruit{" +
@@ -118,7 +107,6 @@ public class Recruit implements Serializable {
                 ", rct_salary=" + rct_salary +
                 ", e_id=" + e_id +
                 ", rct_is_draft=" + rct_is_draft +
-                ", rct_is_publish=" + rct_is_publish +
                 '}';
     }
 }

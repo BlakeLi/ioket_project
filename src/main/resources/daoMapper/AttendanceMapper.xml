@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ietok.project.dao.AttendanceDao">
+
+    <insert id="addAttendance">
+        insert into HRM_ATTENDANCE (E_ID, ATD_START_TIME)
+                            values (#{e_id},sysdate)
+    </insert>
+    <update id="updateAttendance">
+        update HRM_ATTENDANCE set ATD_END_TIME = sysdate
+                                  where ATD_ID = #{atd_id}
+    </update>
+    <delete id="deleteAttendance">
+        delete from HRM_ATTENDANCE where to_number(ATD_START_TIME-sysdate)=0 and E_ID = #{e_id};
+    </delete>
+    <select id="getAttendance" resultType="com.ietok.project.entity.Attendance">
+        select * from HRM_ATTENDANCE
+    </select>
+    <select id="getAttendanceByE_idAndDate" resultType="Integer">
+        select round(to_number(ATD_END_TIME-ATD_START_TIME)*24)+1 from HRM_ATTENDANCE where E_ID = #{e_id} and months_between(sysdate,ATD_START_TIME)=1
+    </select>
+    <select id="getAttendanceByID" resultType="com.ietok.project.entity.Attendance">
+        select * from HRM_ATTENDANCE where to_number(ATD_START_TIME-sysdate)=0 and E_ID = #{e_id};
+    </select>
+</mapper>

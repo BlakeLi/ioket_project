@@ -7,6 +7,8 @@ import java.util.List;
 public interface FifsService {
     boolean addFifs(Fifs fifs);
     boolean updateFifs(Fifs fifs);
-    Fifs getFifs(Integer cv_id);
-    List<Fifs> getFifss(Integer F_is_read);
+    boolean delFifs(Fifs fifs);
+
+    Fifs getFifsByID(Integer f_id);
+    List<Fifs> getFifsByC_id(Integer c_id);
 }

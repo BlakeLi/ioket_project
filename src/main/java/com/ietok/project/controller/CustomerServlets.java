@@ -1,5 +1,6 @@
 package com.ietok.project.controller;
 
+import com.ietok.project.entity.Customer;
 import com.ietok.project.entity.Cv;
 import com.ietok.project.entity.Fifs;
 import com.ietok.project.entity.Recruit;
@@ -28,6 +29,16 @@ public class CustomerServlets {
     @Resource
     private FifsService fifsService;
 
+
+    //欢迎界面
+    @RequestMapping("/")
+    public String controller(HttpSession session){
+        List<Recruit> recruits = recruitService.getPublishedRecruits();
+        session.setAttribute("p_recruits",recruits);
+
+        return "index";
+    }
+
     //游客注册控制器
     @RequestMapping("registerCustomer")
     public String registerCustomer(String name,String pass){
@@ -39,8 +50,10 @@ public class CustomerServlets {
 
     //游客登陆控制器
     @RequestMapping("loginCustomer")
-    public String loginCustomer(String name,String pass){
-        if(customerService.getCustomer(name,pass)!=null){
+    public String loginCustomer(String name,String pass,HttpSession session){
+        Customer customer = customerService.getCustomer(name,pass);
+        if(customer!=null){
+            session.setAttribute("customer",customer);
             return "WEB-INF/test/success";
         }
         return "WEB-INF/test/fail";
@@ -94,6 +107,39 @@ public class CustomerServlets {
         if(fifsService.addFifs(fifs)){
             return "WEB-INF/test/success";
         }
+        return "WEB-INF/test/fail";
+    }
+
+    //同意面试申请
+    @RequestMapping("agreeFifs")
+    public String updateFifs(Fifs fifs, String agree){
+        if(fifs!=null&&fifs.getF_id()!=null&&agree!=null){
+            Fifs ffs = fifsService.getFifsByID(fifs.getF_id());
+            if(Integer.parseInt(agree)==0){
+                if(fifsService.delFifs(fifs)){
+                    System.out.println("已经删除拒绝的面试申请");
+                    return "WEB-INF/test/success";
+                }
+            }
+            ffs.setF_is_agree(1);
+            if(fifsService.updateFifs(ffs)){
+                return "WEB-INF/test/success";
+            }
+        }
+        return "WEB-INF/test/fail";
+    }
+
+    //查看所有已经同意的面试申请
+    @RequestMapping("getFifsByAccept")
+    public String getFifsByAccept(String c_id,HttpSession session){
+        if(c_id!=null){
+            List<Fifs> fifss = fifsService.getFifsByC_id(Integer.parseInt(c_id));
+            if(fifss.size()!=0){
+                session.setAttribute("fifsAccept",fifss);
+                return "WEB-INF/test/success";
+            }
+        }
+
         return "WEB-INF/test/fail";
     }
 }

@@ -4,12 +4,11 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ietok.project.dao.PositionDao">
     <insert id="addPosition">
-        insert into HRM_POSITION (DEP_ID, E_ID, POS_NAME) values (#{dep_id},#{e_id},#{pos_name})
+        insert into HRM_POSITION (DEP_ID, POS_NAME) values (#{dep_id},#{pos_name})
     </insert>
     <update id="updatePosition">
         update HRM_POSITION set
                                 DEP_ID =#{dep_id},
-                                E_ID = #{e_id},
                                 POS_NAME = #{pos_name}
         where POS_ID = #{pos_id}
     </update>
@@ -19,6 +18,13 @@
     <delete id="delPositionByDep">
         delete from HRM_POSITION where DEP_ID =#{dep_id}
     </delete>
-    <select id="getPositionByID" resultType="com.ietok.project.entity.Position"></select>
-    <select id="getPositionByDep" resultType="com.ietok.project.entity.Position"></select>
+    <select id="getPositionByID" resultType="com.ietok.project.entity.Position">
+        select * from HRM_POSITION where POS_ID = #{pos_id}
+    </select>
+    <select id="getPositionByDep" resultType="com.ietok.project.entity.Position">
+        select * from HRM_POSITION where DEP_ID = #{dep_id}
+    </select>
+    <select id="getPositionByNameAndDep" resultType="com.ietok.project.entity.Position">
+        select * from HRM_POSITION where DEP_ID = #{dep_id} and POS_NAME = #{pos_name}
+    </select>
 </mapper>

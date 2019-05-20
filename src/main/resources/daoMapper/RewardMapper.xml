@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ietok.project.dao.RewardDao">
+    <insert id="addReward">
+        insert into HRM_REWARD (E_ID, R_DATE, R_REASON, R_MONEY)
+        values (#{e_id},sysdate,#{r_reason},#{r_money})
+    </insert>
+    <update id="updateReward">
+        update HRM_REWARD set R_REASON = #{r_reason},
+                              R_MONEY = #{r_money} where R_ID = #{r_id}
+    </update>
+    <select id="getRewardById" resultType="com.ietok.project.entity.Reward">
+        select * from HRM_REWARD where R_ID = #{r_id}
+    </select>
+    <select id="getRewards" resultType="com.ietok.project.entity.Reward">
+        select * from HRM_REWARD
+    </select>
+    <select id="getRewardsByE_id" resultType="com.ietok.project.entity.Reward">
+        select * from HRM_REWARD where E_ID = #{e_id}
+    </select>
+    <select id="getRewardsByDateAndE_id" resultType="com.ietok.project.entity.Reward">
+        select * from HRM_REWARD where months_between(sysdate,R_DATE)=1 and E_ID = #{e_id}
+    </select>
+</mapper>
