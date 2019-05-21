@@ -12,4 +12,6 @@ public interface EmployeeService {
     Employee getEmployeeByNameAndPass(String name,String pass);
     Employee getEmployee(Integer E_id);
     List<Employee> getEmployeesByPosID(Integer pos_id);
+
+    List<Employee> getAllEmployee();
 }

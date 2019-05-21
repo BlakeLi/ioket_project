@@ -7,6 +7,7 @@ import java.util.List;
 public interface RecruitService {
     boolean addRecruit(Recruit recruit);
     boolean updateRecruit(Recruit recruit);
+    boolean publishRecruit(Recruit recruit);
     boolean deleteRecruit(Recruit recruit);
 
     Recruit getRecruitByID(Recruit recruit);

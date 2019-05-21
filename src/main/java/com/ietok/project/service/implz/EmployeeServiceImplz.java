@@ -72,4 +72,9 @@ public class EmployeeServiceImplz implements EmployeeService {
     public List<Employee> getEmployeesByPosID(Integer pos_id) {
         return null;
     }
+
+    @Override
+    public List<Employee> getAllEmployee() {
+        return employeeDao.getAllEmployee();
+    }
 }

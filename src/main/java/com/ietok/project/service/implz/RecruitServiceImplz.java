@@ -44,6 +44,14 @@ public class RecruitServiceImplz implements RecruitService {
     }
 
     @Override
+    public boolean publishRecruit(Recruit recruit) {
+        if(recruit!=null&&recruit.getRct_id()!=null){
+            return recruitDao.publishRecruit(recruit);
+        }
+        return false;
+    }
+
+    @Override
     public boolean deleteRecruit(Recruit recruit) {
         if(recruit!=null&&recruit.getRct_id()!=null){
             Recruit rct = recruitDao.getRecruitByID(recruit);

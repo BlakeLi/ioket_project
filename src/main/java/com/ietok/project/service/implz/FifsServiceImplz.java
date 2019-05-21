@@ -71,4 +71,9 @@ public class FifsServiceImplz implements FifsService {
         }
         return fifss;
     }
+
+    @Override
+    public List<Fifs> getFifsAll() {
+        return fifsDao.getFifsAll();
+    }
 }

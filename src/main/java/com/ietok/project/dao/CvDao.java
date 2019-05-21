@@ -11,4 +11,6 @@ public interface CvDao {
 
     Cv getCv(Cv cv);
     List<Cv> getCvs(Cv cv);
+
+    List<Cv> getAllCv();
 }

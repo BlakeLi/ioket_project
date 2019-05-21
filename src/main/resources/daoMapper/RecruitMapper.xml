@@ -12,11 +12,16 @@
                                POS_ID = #{pos_id},
                                RCT_TITLE = #{rct_title},
                                RCT_INTRODUCTION = #{rct_introduction},
-                               RCT_PUBLISH_TIME = #{rct_publish_time},
                                RCT_ADDRESS = #{rct_address},
                                RCT_SALARY = #{rct_salary},
                                E_ID = #{e_id},
                                RCT_IS_DRAFT = #{rct_is_draft}
+        where RCT_ID = #{rct_id}
+    </update>
+    <update id="publishRecruit">
+        update HRM_RECRUIT set
+                               RCT_IS_DRAFT = 0,
+                               RCT_PUBLISH_TIME = sysdate
         where RCT_ID = #{rct_id}
     </update>
     <delete id="deleteRecruit">

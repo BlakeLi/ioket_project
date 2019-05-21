@@ -68,4 +68,9 @@ public class CvServiceImplz implements CvService {
         cv.setC_id(c_id);
         return cvDao.getCvs(cv);
     }
+
+    @Override
+    public List<Cv> getAllCvs() {
+        return cvDao.getAllCv();
+    }
 }

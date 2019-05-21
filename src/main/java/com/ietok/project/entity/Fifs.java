@@ -1,7 +1,7 @@
 package com.ietok.project.entity;
 
 import java.io.Serializable;
-import java.sql.Date;
+import java.util.Date;
 
 public class Fifs implements Serializable {
     private Integer f_id;

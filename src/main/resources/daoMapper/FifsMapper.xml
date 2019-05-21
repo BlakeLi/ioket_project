@@ -29,4 +29,7 @@
     <select id="getFifssByRCT_id" resultType="com.ietok.project.entity.Fifs">
         select * from HRM_FTFS where RCT_ID =#{rct_id}
     </select>
+    <select id="getFifsAll" resultType="com.ietok.project.entity.Fifs">
+        select * from HRM_FTFS
+    </select>
 </mapper>

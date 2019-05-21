@@ -11,4 +11,6 @@ public interface CvService {
 
     Cv getCv(Integer cv_id);
     List<Cv> getCvs(Integer c_id);
+
+    List<Cv> getAllCvs();
 }

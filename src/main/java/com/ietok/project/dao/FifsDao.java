@@ -12,4 +12,5 @@ public interface FifsDao {
     Fifs getFifs(Fifs fifs);
     List<Fifs> getFifssByCv_id(Fifs fifs);
     List<Fifs> getFifssByRCT_id(Fifs fifs);
+    List<Fifs> getFifsAll();
 }

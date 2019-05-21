@@ -5,10 +5,14 @@ import com.ietok.project.service.service.*;
 import com.ietok.project.util.Method_name;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpSession;
 import java.sql.Date;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.List;
 
@@ -83,26 +87,40 @@ public class AdminServlets {
 
     //录用
     @RequestMapping("enroll")
-    public String enrollEmployee(Employee employee, String f_id){
+    public String enrollEmployee(String e_phone, String e_debit, String f_id,HttpSession session){
         if(f_id==null){
-            return "WEB-INF/test/fail";
+            return "admin";
         }
         Fifs fifs = fifsService.getFifsByID(Integer.parseInt(f_id));
+        Employee employee = new Employee();
+        employee.setE_debit(Long.parseLong(e_debit));
+        employee.setE_phone(Long.parseLong(e_phone));
         if(employeeService.addEmployee(employee,fifs.getCv_id(),fifs.getRct_id())){
-            return "WEB-INF/test/success";
+            if(fifsService.delFifs(fifs)){
+                List<Employee> employees = employeeService.getAllEmployee();
+                session.setAttribute("employees",employees);
+            }
         }
-        return "WEB-INF/test/fail";
+        return "admin";
     }
+
 
     //修改面试信息
     //注意需要修改时间
     @RequestMapping("acceptFifs")
-    public String updateFifs(Fifs fifs){
-        fifs.setF_is_accept(1);
-        if(fifsService.updateFifs(fifs)){
-            return "WEB-INF/test/success";
+    public String updateFifs(String f_id,String f_date,HttpSession session) throws ParseException {
+        Fifs fs = fifsService.getFifsByID(Integer.parseInt(f_id));
+        fs.setF_is_accept(1);
+        System.out.println(f_date);
+        DateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'hh:mm");
+        java.util.Date utilD= format.parse(f_date);
+        System.out.println(utilD);
+        fs.setF_date(utilD);
+        if(fifsService.updateFifs(fs)){
+            List<Fifs> fifs = fifsService.getFifsAll();
+            session.setAttribute("fifs",fifs);
         }
-        return "WEB-INF/test/fail";
+        return "admin";
     }
 
 
@@ -122,37 +140,59 @@ public class AdminServlets {
     }
 
     //生成新的招聘信息
-    //在招聘信息是草稿的情况下修改招聘信息，否则撤销已经发布的招聘信息
-    //删除招聘信息，在发布的情况下不可删除
-    @RequestMapping("changeRct")
-    public  String changeRct(Recruit recruit,String method){
-        if(Method_name.INSERT.equals(method)){
-            if(recruitService.addRecruit(recruit)){
-                return "WEB-INF/test/success";
-            }
-        }else if(Method_name.UPDATE.equals(method)){
-            if(recruitService.updateRecruit(recruit)){
-                return "WEB-INF/test/success";
-            }
-        }else if(Method_name.DELETE.equals(method)){
-            if(recruitService.deleteRecruit(recruit)){
-                return "WEB-INF/test/success";
-            }
+    @RequestMapping("addRct")
+    public String addRct(Recruit recruit,HttpSession session){
+        if(recruitService.addRecruit(recruit)){
+            List<Recruit> u_recruits = recruitService.getUnpublishedRecruits();
+            List<Recruit> p_recruits = recruitService.getPublishedRecruits();
+            session.setAttribute("p_recruits",p_recruits);
+            session.setAttribute("u_recruits",u_recruits);
         }
-        return "WEB-INF/test/fail";
+        return "admin";
     }
+
+    //修改招聘状态，如果招聘状态是草稿就改为可以修改
+    @RequestMapping("updateRct")
+    public String updateRct(Recruit recruit,HttpSession session){
+        if (recruitService.updateRecruit(recruit)) {
+            List<Recruit> u_recruits = recruitService.getUnpublishedRecruits();
+            List<Recruit> p_recruits = recruitService.getPublishedRecruits();
+            session.setAttribute("p_recruits", p_recruits);
+            session.setAttribute("u_recruits", u_recruits);
+        }
+        return "admin";
+    }
+
+    //删除招聘信息
+    @RequestMapping("delRct")
+    public String delRct(Recruit recruit,HttpSession session){
+        if(recruitService.deleteRecruit(recruit)){
+            List<Recruit> u_recruits = recruitService.getUnpublishedRecruits();
+            List<Recruit> p_recruits = recruitService.getPublishedRecruits();
+            session.setAttribute("p_recruits", p_recruits);
+            session.setAttribute("u_recruits", u_recruits);
+        }
+        return "admin";
+    }
+
+    //发布招聘信息
+    @RequestMapping("publishRecruit")
+    public String publishRecruit(Recruit recruit,HttpSession session){
+        if(recruitService.publishRecruit(recruit)){
+            List<Recruit> u_recruits = recruitService.getUnpublishedRecruits();
+            List<Recruit> p_recruits = recruitService.getPublishedRecruits();
+            session.setAttribute("p_recruits", p_recruits);
+            session.setAttribute("u_recruits", u_recruits);
+        }
+        return "admin";
+    }
+
 
     //通过ID查找招聘信息
     @RequestMapping("findRct")
-    public String findRct(Recruit recruit, String method,HttpSession session){
-        if(Method_name.SELECT_BY_RCT_ID.equals(method)){
-            Recruit rct = recruitService.getRecruitByID(recruit);
-            if(rct!=null){
-                session.setAttribute("rct",rct);
-                return "WEB-INF/test/success";
-            }
-        }
-        return "WEB-INF/test/fail";
+    @ResponseBody
+    public Recruit findRct(Recruit recruit){
+        return recruitService.getRecruitByID(recruit);
     }
 
     //增删改department
@@ -199,39 +239,17 @@ public class AdminServlets {
         return "WEB-INF/test/fail";
     }
 
-    //查询department
+    //查询department返回Json List
     @RequestMapping("findDep")
-    public String findDep(Department department, HttpSession session){
-        if(department!=null){
-            List<Department> departments = departmentService.getDepartments();
-            if(departments.size()!=0){
-                session.setAttribute("departments",departments);
-                return "WEB-INF/test/success";
-            }
-        }
-        return "WEB-INF/test/fail";
+    @ResponseBody
+    public List<Department> findDep(){
+        return departmentService.getDepartments();
     }
 
-    //查询position
+    //查询position返回Json List
     @RequestMapping("findPos")
-    public String findPos(Position position,String method,HttpSession session){
-        if(Method_name.SELECT_BY_DEP_ID.equals(method)){
-            if(position!=null&&position.getDep_id()!=null){
-                List<Position> positions = positionService.getPositionByDep(position);
-                if(positions.size()!=0){
-                    session.setAttribute("positionsByDep",positions);
-                    return "WEB-INF/test/success";
-                }
-            }
-        }else if(Method_name.SELECT_BY_ID.equals(method)){
-            if(position!=null&&position.getPos_id()!=null){
-                Position pos = positionService.getPositionByID(position);
-                if(pos.getPos_name()!=null){
-                    session.setAttribute("positionByID",pos);
-                    return "WEB-INF/test/success";
-                }
-            }
-        }
-        return "WEB-INF/test/fail";
+    @ResponseBody
+    public List<Position> findPos(Position position){
+        return positionService.getPositionByDep(position);
     }
 }

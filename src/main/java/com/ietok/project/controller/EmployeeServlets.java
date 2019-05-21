@@ -30,6 +30,10 @@ public class EmployeeServlets{
         Employee employee = employeeService.getEmployeeByNameAndPass(name,pass);
         List<Recruit> recruits = recruitService.getUnpublishedRecruits();
         List<Position> positions = positionService.getAllPosition();
+        List<Fifs> fifs = fifsService.getFifsAll();
+        List<Cv> cvs = cvService.getAllCvs();
+        session.setAttribute("fifs",fifs);
+        session.setAttribute("cv",cvs);
         session.setAttribute("position",positions);
         session.setAttribute("u_recruits",recruits);
         if(employee==null){

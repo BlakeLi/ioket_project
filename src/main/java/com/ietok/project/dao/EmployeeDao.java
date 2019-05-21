@@ -12,4 +12,6 @@ public interface EmployeeDao {
     Employee getEmployeeByNameAndPass(Employee employee);
     Employee getEmployee(Employee employee);
     List<Employee> getEmployeesByPosID(Integer pos_id);
+
+    List<Employee> getAllEmployee();
 }

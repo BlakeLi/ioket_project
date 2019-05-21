@@ -11,4 +11,5 @@ public interface FifsService {
 
     Fifs getFifsByID(Integer f_id);
     List<Fifs> getFifsByC_id(Integer c_id);
+    List<Fifs> getFifsAll();
 }

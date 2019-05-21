@@ -33,4 +33,7 @@
     <select id="getCvs" resultType="com.ietok.project.entity.Cv">
         select * from HRM_CV where C_ID = #{c_id}
     </select>
+    <select id="getAllCv" resultType="com.ietok.project.entity.Cv">
+        select * from HRM_CV
+    </select>
 </mapper>

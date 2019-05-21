@@ -30,7 +30,7 @@ public class SalaryServiceImplz implements SalaryService {
         if(salary!=null&&salary.getE_id()!=null){
             Employee employee = new Employee();
             employee.setE_id(salary.getE_id());
-            employeeDao.getEmployee(employee);
+            employee = employeeDao.getEmployee(employee);//youwenti
             //社保
             salary.setS_s_insurance(employee.getE_salary()*0.1);
 
