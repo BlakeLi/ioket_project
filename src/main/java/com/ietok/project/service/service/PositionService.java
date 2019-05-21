@@ -12,4 +12,5 @@ public interface PositionService {
 
     Position getPositionByID(Position position);
     List<Position> getPositionByDep(Position position);
+    List<Position> getAllPosition();
 }

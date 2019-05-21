@@ -32,7 +32,7 @@
                 <li><a>公司简介</a></li>
                 <li><a data-toggle="modal" data-target="#mainPage-modal" data-url="registerCustomer" data-title="游客注册">游客注册</a></li>
                 <li><a data-toggle="modal" data-target="#mainPage-modal" data-url="loginCustomer" data-title="游客登陆">游客登陆</a></li>
-                <li><a data-toggle="modal" data-target="#mainPage-modal" data-url="Cregister" data-title="员工登陆">员工登陆</a></li>
+                <li><a data-toggle="modal" data-target="#mainPage-modal" data-url="loginEmployee" data-title="员工登陆">员工登陆</a></li>
             </ul>
         </div>
     </div>
@@ -178,6 +178,7 @@
             return;
         }
         modal.find(".modal-body form[action='loginCustomer']").submit();
+        modal.find(".modal-body form[action='loginEmployee']").submit();
     });
 </script>
 </body>

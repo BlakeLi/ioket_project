@@ -32,4 +32,7 @@
     <select id="getEmployeesByPosID" resultType="com.ietok.project.entity.Employee">
         select * from HRM_EMPLOYEE where POS_ID = #{pos_id}
     </select>
+    <select id="getEmployeeByNameAndPass" resultType="com.ietok.project.entity.Employee">
+        select * from HRM_EMPLOYEE where E_ACCOUNT = #{e_account} and E_PASS = #{e_pass}
+    </select>
 </mapper>

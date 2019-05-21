@@ -13,4 +13,5 @@ public interface PositionDao {
     Position getPositionByNameAndDep(Position position);
     Position getPositionByID(Position position);
     List<Position> getPositionByDep(Position position);
+    List<Position> getAllPosition();
 }

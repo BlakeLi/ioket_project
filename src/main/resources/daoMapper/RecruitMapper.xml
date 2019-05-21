@@ -28,4 +28,7 @@
     <select id="getRecruitByID" resultType="com.ietok.project.entity.Recruit">
         select * from HRM_RECRUIT where RCT_ID=#{rct_id}
     </select>
+    <select id="getUnpublishedRecruit" resultType="com.ietok.project.entity.Recruit">
+        select * from HRM_RECRUIT where RCT_IS_DRAFT = 1
+    </select>
 </mapper>

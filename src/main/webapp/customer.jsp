@@ -95,25 +95,31 @@
                     <tr>
                         <td>招聘主题</td>
                         <td>招聘简介</td>
+                        <td>地址</td>
                         <td>薪资</td>
                         <td>职位</td>
                     </tr>
                     <c:forEach items="${sessionScope.p_recruits}" var="i">
-                        <tr>
-                            <td>${i.rct_title}</td>
-                            <td>${i.rct_introduction}</td>
-                            <td>薪资：￥${i.rct_salary}/月</td>
-                            <td>balabalabalabala</td>
-                            <td>
-                                <form role="form" class="form" action="addFifs" method="get">
-                                    <div class="form-group form-inline">
-                                        <input name="cv_id" class="form-control" type="text" maxlength="3" placeholder="请输入简历ID哦" required/>
-                                        <input name="rct_id" type="hidden" value="${i.rct_id}"/>
-                                        <input class="changeCvBtn btn btn-primary" type="submit" value="投递简历">
-                                    </div>
-                                </form>
-                            </td>
-                        </tr>
+                        <c:forEach items="${sessionScope.position}" var="j">
+                            <c:if test="${i.pos_id eq j.pos_id}">
+                                <tr>
+                                    <td>${i.rct_title}</td>
+                                    <td>${i.rct_introduction}</td>
+                                    <td>${i.rct_address}</td>
+                                    <td>薪资：￥${i.rct_salary}/月</td>
+                                    <td>${j.pos_name}</td>
+                                    <td>
+                                        <form role="form" class="form" action="addFifs" method="get">
+                                            <div class="form-group form-inline">
+                                                <input name="cv_id" class="form-control" type="text" maxlength="3" placeholder="请输入简历ID哦" required/>
+                                                <input name="rct_id" type="hidden" value="${i.rct_id}"/>
+                                                <input class="changeCvBtn btn btn-primary" type="submit" value="投递简历">
+                                            </div>
+                                        </form>
+                                    </td>
+                                </tr>
+                            </c:if>
+                        </c:forEach>
                     </c:forEach>
                 </table>
                 <div class="panel-footer">

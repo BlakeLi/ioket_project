@@ -1,13 +1,7 @@
 package com.ietok.project.controller;
 
-import com.ietok.project.entity.Customer;
-import com.ietok.project.entity.Cv;
-import com.ietok.project.entity.Fifs;
-import com.ietok.project.entity.Recruit;
-import com.ietok.project.service.service.CustomerService;
-import com.ietok.project.service.service.CvService;
-import com.ietok.project.service.service.FifsService;
-import com.ietok.project.service.service.RecruitService;
+import com.ietok.project.entity.*;
+import com.ietok.project.service.service.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -30,6 +24,8 @@ public class CustomerServlets {
     private CvService cvService;
     @Resource
     private FifsService fifsService;
+    @Resource
+    private PositionService positionService;
 
 
     //欢迎界面
@@ -57,8 +53,7 @@ public class CustomerServlets {
         if(customer!=null&&customer.getC_id()!=null){
             List<Cv> cvs = cvService.getCvs(customer.getC_id());
             List<Fifs> fifsByC_id = fifsService.getFifsByC_id(customer.getC_id());
-
-            System.out.println(fifsByC_id);
+            List<Position> positions = positionService.getAllPosition();
             List<Fifs> acceptF = new ArrayList<>();
             List<Fifs> agreeF = new ArrayList<>();
             for (Fifs fifs : fifsByC_id) {
@@ -68,10 +63,9 @@ public class CustomerServlets {
                     agreeF.add(fifs);
                 }
             }
+            session.setAttribute("position",positions);
             session.setAttribute("customer",customer);
             session.setAttribute("acceptF",acceptF);
-            System.out.println(acceptF);
-            System.out.println(agreeF);
             session.setAttribute("agreeF",agreeF);
             session.setAttribute("cvs",cvs);
             return "customer";

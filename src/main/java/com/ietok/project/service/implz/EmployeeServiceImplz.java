@@ -10,6 +10,7 @@ import com.ietok.project.service.service.EmployeeService;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 @Service("employeeService")
 public class EmployeeServiceImplz implements EmployeeService {
@@ -38,5 +39,37 @@ public class EmployeeServiceImplz implements EmployeeService {
             return employeeDao.addEmployee(employee);
         }
         return false;
+    }
+
+    @Override
+    public boolean updateEmployee(Employee employee) {
+        return false;
+    }
+
+    @Override
+    public boolean delEmployee(Integer E_id) {
+        return false;
+    }
+
+    @Override
+    public Employee getEmployeeByNameAndPass(String name, String pass){
+        if(name==null||pass==null){
+            return null;
+        }
+        Employee employee = new Employee();
+        employee.setE_account(name);
+        employee.setE_pass(pass);
+        return employeeDao.getEmployeeByNameAndPass(employee
+        );
+    }
+
+    @Override
+    public Employee getEmployee(Integer E_id) {
+        return null;
+    }
+
+    @Override
+    public List<Employee> getEmployeesByPosID(Integer pos_id) {
+        return null;
     }
 }

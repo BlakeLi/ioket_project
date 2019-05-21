@@ -69,7 +69,6 @@ public class FifsServiceImplz implements FifsService {
             fifs.setCv_id(cv1.getCv_id());
             fifss.addAll(fifsDao.getFifssByCv_id(fifs));
         }
-        System.out.println(fifss);
         return fifss;
     }
 }

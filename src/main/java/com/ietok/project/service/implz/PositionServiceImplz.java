@@ -73,4 +73,9 @@ public class PositionServiceImplz implements PositionService {
         }
         return positionDao.getPositionByDep(position);
     }
+
+    @Override
+    public List<Position> getAllPosition() {
+        return positionDao.getAllPosition();
+    }
 }

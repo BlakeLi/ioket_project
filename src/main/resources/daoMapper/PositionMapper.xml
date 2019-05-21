@@ -27,4 +27,7 @@
     <select id="getPositionByNameAndDep" resultType="com.ietok.project.entity.Position">
         select * from HRM_POSITION where DEP_ID = #{dep_id} and POS_NAME = #{pos_name}
     </select>
+    <select id="getAllPosition" resultType="com.ietok.project.entity.Position">
+        select * from HRM_POSITION
+    </select>
 </mapper>

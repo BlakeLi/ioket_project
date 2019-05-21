@@ -10,4 +10,5 @@ public interface RecruitDao {
     boolean deleteRecruit(Recruit recruit);
     Recruit getRecruitByID(Recruit recruit);
     List<Recruit> getPublishedRecruit();
+    List<Recruit> getUnpublishedRecruit();
 }

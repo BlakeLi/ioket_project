@@ -9,6 +9,7 @@ public interface EmployeeDao {
     boolean updateEmployee(Employee employee);
     boolean delEmployee(Employee employee);
 
+    Employee getEmployeeByNameAndPass(Employee employee);
     Employee getEmployee(Employee employee);
     List<Employee> getEmployeesByPosID(Integer pos_id);
 }

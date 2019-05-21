@@ -11,4 +11,5 @@ public interface RecruitService {
 
     Recruit getRecruitByID(Recruit recruit);
     List<Recruit> getPublishedRecruits();
+    List<Recruit> getUnpublishedRecruits();
 }

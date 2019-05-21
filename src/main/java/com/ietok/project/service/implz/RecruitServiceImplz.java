@@ -72,4 +72,9 @@ public class RecruitServiceImplz implements RecruitService {
     public List<Recruit> getPublishedRecruits() {
         return recruitDao.getPublishedRecruit();
     }
+
+    @Override
+    public List<Recruit> getUnpublishedRecruits() {
+        return recruitDao.getUnpublishedRecruit();
+    }
 }
