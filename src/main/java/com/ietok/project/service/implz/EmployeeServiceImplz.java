@@ -36,6 +36,7 @@ public class EmployeeServiceImplz implements EmployeeService {
             employee.setE_address(cv.getCv_address());
             employee.setPos_id(rct.getPos_id());
             employee.setE_salary(rct.getRct_salary());
+            employee.setE_type(0);
             return employeeDao.addEmployee(employee);
         }
         return false;

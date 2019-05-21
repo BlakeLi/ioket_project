@@ -3,6 +3,7 @@ package com.ietok.project.controller;
 import com.ietok.project.entity.*;
 import com.ietok.project.service.service.*;
 import com.ietok.project.util.Method_name;
+import org.omg.PortableInterceptor.INACTIVE;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -32,6 +33,8 @@ public class AdminServlets {
     private SalaryService salaryService;
     @Resource
     private RewardService rewardService;
+    @Resource
+    private CvService cvService;
 
     //修改-薪资-复议状态
     //入参需求S_ID
@@ -87,7 +90,7 @@ public class AdminServlets {
 
     //录用
     @RequestMapping("enroll")
-    public String enrollEmployee(String e_phone, String e_debit, String f_id,HttpSession session){
+    public String enrollEmployee(String e_phone, String e_debit, String e_account, String e_pass, String f_id,HttpSession session){
         if(f_id==null){
             return "admin";
         }
@@ -95,10 +98,14 @@ public class AdminServlets {
         Employee employee = new Employee();
         employee.setE_debit(Long.parseLong(e_debit));
         employee.setE_phone(Long.parseLong(e_phone));
+        employee.setE_account(e_account);
+        employee.setE_pass(e_pass);
         if(employeeService.addEmployee(employee,fifs.getCv_id(),fifs.getRct_id())){
             if(fifsService.delFifs(fifs)){
                 List<Employee> employees = employeeService.getAllEmployee();
                 session.setAttribute("employees",employees);
+                List<Fifs> fifsList = fifsService.getFifsAll();
+                session.setAttribute("fifs",fifsList);
             }
         }
         return "admin";
@@ -126,17 +133,17 @@ public class AdminServlets {
 
     //读取指定的面试申请，并且标记为已读
     @RequestMapping("chooseFifs")
-    public String getFifs(Fifs fifs,HttpSession session){
-        if(fifs!=null&&fifs.getF_id()!=null){
-            Fifs ffs = fifsService.getFifsByID(fifs.getF_id());
-            ffs.setF_is_read(1);
-            if(fifsService.updateFifs(ffs)){
-                System.out.println("已读");
-            }
-            session.setAttribute("ffs",ffs);
-            return "WEB-INF/test/success";
+    @ResponseBody
+    public Cv getFifs(String cv_id ,String f_id ,HttpSession session){
+        Fifs ffs = fifsService.getFifsByID(Integer.parseInt(f_id));
+        ffs.setF_is_read(1);
+        if(fifsService.updateFifs(ffs)){
+            System.out.println("已读");
+            List<Fifs> fifsList = fifsService.getFifsAll();
+            session.setAttribute("fifs",fifsList);
         }
-        return "WEB-INF/test/fail";
+        Cv cv = cvService.getCv(Integer.parseInt(cv_id));
+        return cv;
     }
 
     //生成新的招聘信息

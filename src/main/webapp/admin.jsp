@@ -188,7 +188,7 @@
                                                 </c:otherwise>
                                             </c:choose>
                                             <td>
-                                                <button class="btn btn-primary" data-toggle="modal" data-target="#ViewCv-modal" data-title="查看简历" data-cv_id="${i.cv_id}">查看简历</button>
+                                                <button class="btn btn-primary" data-toggle="modal" data-target="#ViewCv-modal" data-title="查看简历" data-cv_id="${i.cv_id}" data-f_id="${i.f_id}">查看简历</button>
                                             </td>
                                             <td>
                                                 <form role="form" class="form" action="acceptFifs" method="post">
@@ -254,6 +254,14 @@
                                                 <td>
                                                     <form role="form" class="form" action="enroll" method="post">
                                                         <input class="form-control" type="hidden" name="f_id" value="${i.f_id}">
+                                                        <div class="form-group">
+                                                            <label class="control-label">请输入员工账号</label>
+                                                            <input id="e_account" type="text" class="form-control" name="e_account" maxlength="10" required>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label class="control-label">请输入员工密码</label>
+                                                            <input id="e_pass" type="text" class="form-control" name="e_pass" maxlength="10" required>
+                                                        </div>
                                                         <div class="form-group">
                                                             <label class="control-label">请输入电话号码</label>
                                                             <input id="phoneNumber" type="text" class="form-control" name="e_phone" maxlength="11" required>
@@ -349,18 +357,50 @@
                 <h4 class="modal-title"></h4>
             </div>
             <div class="modal-body">
-                <form role="form" class="form" action="updateRct" method="post">
+                <form role="form" class="form" method="post">
                     <div class="form-group col-lg-10 col-lg-offset-1">
-                        <label class="control-label">标题：</label>
-                        <input class="form-control" type="text" name="rct_title" placeholder="请输入一个标题" maxlength="30">
+                        <label class="control-label">姓名:</label>
+                        <input class="form-control" type="text" name="cv_name" readonly>
                     </div>
                     <div class="form-group col-lg-10 col-lg-offset-1">
-                        <label class="control-label">主要内容:</label>
-                        <textarea class="form-control" name="rct_introduction"></textarea>
+                        <label class="control-label">性别:</label>
+                        <input class="form-control" name="cv_gender" type="text" readonly/>
+                    </div>
+                    <div class="form-group col-lg-10 col-lg-offset-1">
+                        <label class="control-label">生日:</label>
+                        <input class="form-control" name="cv_birth" type="date" readonly/>
                     </div>
                     <div class="form-group col-lg-10 col-lg-offset-1">
                         <label class="control-label">地址:</label>
-                        <input class="form-control" name="rct_address" type="text" placeholder="请输入地址" maxlength="30"/>
+                        <input class="form-control" name="cv_address" type="text" placeholder="不超过80个字" readonly/>
+                    </div>
+                    <div class="form-group col-lg-10 col-lg-offset-1">
+                        <label class="control-label">文化程度:</label>
+                        <input class="form-control" name="cv_education" type="text" placeholder="education" readonly/>
+                    </div>
+                    <div class="form-group col-lg-10 col-lg-offset-1">
+                        <label class="control-label">毕业院校:</label>
+                        <input class="form-control" name="cv_school" type="text" placeholder="school" readonly/>
+                    </div>
+                    <div class="form-group col-lg-10 col-lg-offset-1">
+                        <label class="control-label">主学专业:</label>
+                        <input class="form-control" name="cv_major" type="text" placeholder="major" readonly/>
+                    </div>
+                    <div class="form-group col-lg-10 col-lg-offset-1">
+                        <label class="control-label">入学时间:</label>
+                        <input class="form-control" name="cv_enroll_date" type="date" readonly/>
+                    </div>
+                    <div class="form-group col-lg-10 col-lg-offset-1">
+                        <label class="control-label">毕业时间:</label>
+                        <input class="form-control" name="cv_graduation_date" type="date" readonly/>
+                    </div>
+                    <div class="form-group col-lg-10 col-lg-offset-1">
+                        <label class="control-label">期望薪资:</label>
+                        <input class="form-control" name="cv_salary" type="number" readonly/>
+                    </div>
+                    <div class="form-group col-lg-10 col-lg-offset-1">
+                        <label class="control-label">主要经历</label>
+                        <textarea class="form-control" name="cv_experience" readonly></textarea>
                     </div>
                 </form>
                 <div class="modal-footer">
@@ -369,7 +409,7 @@
         </div>
     </div>
 </div>
-
+<!--修改招聘信息-->
 <div class="modal fade" id="recruitChange-modal" role="dialog" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -539,9 +579,34 @@
                 form.find("input[name='e_id']").val(date['e_id']);
             }
         });
-
     });
 
+    //显示招聘信息模态框控制器
+    $("#ViewCv-modal").on("show.bs.modal",function (e) {
+        var a = $(e.relatedTarget);
+        var title = a.data("title");
+        var modal = $(this);
+        var form = modal.find(".modal-body form");
+        modal.find(".modal-title").text(title);
+        $.ajax({
+            type:"get",
+            url:"chooseFifs",
+            data:"cv_id="+a.data("cv_id")+"&f_id="+a.data("f_id"),
+            success:function (date) {
+                form.find("input[name='cv_name']").val(date['cv_name']);
+                form.find("input[name='cv_gender']").val(date['cv_gender']);
+                form.find("input[name='cv_birth']").val(date['cv_birth']);
+                form.find("input[name='cv_address']").val(date['cv_address']);
+                form.find("input[name='cv_school']").val(date['cv_school']);
+                form.find("input[name='cv_education']").val(date['cv_education']);
+                form.find("input[name='cv_major']").val(date['cv_major']);
+                form.find("input[name='cv_enroll_date']").val(date['cv_enroll_date']);
+                form.find("input[name='cv_graduation_date']").val(date['cv_graduation_date']);
+                form.find("input[name='cv_salary']").val(date['cv_salary']);
+                form.find("textarea[name='cv_experience']").text(date['cv_experience']);
+            }
+        });
+    });
 
     //修改招聘按钮上传限定
     $("#change-submit").click(function () {
