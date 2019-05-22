@@ -5,7 +5,7 @@
 <mapper namespace="com.ietok.project.dao.DepartmentDao">
     <insert id="addDep">
         insert into HRM_DEPARTMENT (DEP_NAME, DEP_DATE)
-        values (${dep_name},sysdate)
+        values (#{dep_name},sysdate)
     </insert>
     <update id="updateDep">
         update HRM_DEPARTMENT set DEP_NAME = #{dep_name} where DEP_ID =#{dep_id}
@@ -15,6 +15,9 @@
     </delete>
     <select id="getDepartments" resultType="com.ietok.project.entity.Department">
         select * from HRM_DEPARTMENT
+    </select>
+    <select id="getDepartmentByName" resultType="com.ietok.project.entity.Department">
+        select * from HRM_DEPARTMENT where DEP_NAME = #{dep_name}
     </select>
 
 </mapper>

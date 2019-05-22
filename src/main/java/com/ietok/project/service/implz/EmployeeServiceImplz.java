@@ -44,7 +44,7 @@ public class EmployeeServiceImplz implements EmployeeService {
 
     @Override
     public boolean updateEmployee(Employee employee) {
-        return false;
+        return employeeDao.updateEmployee(employee);
     }
 
     @Override
@@ -65,13 +65,15 @@ public class EmployeeServiceImplz implements EmployeeService {
     }
 
     @Override
-    public Employee getEmployee(Integer E_id) {
-        return null;
+    public Employee getEmployee(Integer e_id) {
+        Employee employee = new Employee();
+        employee.setE_id(e_id);
+        return employeeDao.getEmployee(employee);
     }
 
     @Override
     public List<Employee> getEmployeesByPosID(Integer pos_id) {
-        return null;
+        return employeeDao.getEmployeesByPosID(pos_id);
     }
 
     @Override

@@ -9,5 +9,6 @@ public interface DepartmentDao {
     boolean delDep(Department department);
     boolean updateDep(Department department);
 
+    Department getDepartmentByName(Department department);
     List<Department> getDepartments();
 }

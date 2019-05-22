@@ -10,6 +10,7 @@ public interface PositionService {
     boolean delPositionByDep(Integer dep_id);
     boolean updatePosition(Position position);
 
+    Position getPositionByNameAndDep(Position position);
     Position getPositionByID(Position position);
     List<Position> getPositionByDep(Position position);
     List<Position> getAllPosition();

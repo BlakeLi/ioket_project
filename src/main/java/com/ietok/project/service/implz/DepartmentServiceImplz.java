@@ -36,11 +36,11 @@ public class DepartmentServiceImplz implements DepartmentService {
             position.setDep_id(department.getDep_id());
             List<Position> positions = positionDao.getPositionByDep(position);
             if(positions.size()!=0){
-                boolean flag = false;
+                boolean flag = true;
                 for (Position pos : positions) {
                     //如果没有员工在这个部门则返回true
-                    if(employeeDao.getEmployeesByPosID(pos.getPos_id()).size()==0){
-                        flag = true;
+                    if(employeeDao.getEmployeesByPosID(pos.getPos_id()).size()!=0){
+                        flag = false;
                     }
                 }
                 if(flag){
@@ -54,7 +54,10 @@ public class DepartmentServiceImplz implements DepartmentService {
                         return departmentDao.delDep(department);
                     }
                 }
+                return false;
             }
+            System.out.println(1);
+            return departmentDao.delDep(department);
         }
         return false;
     }
@@ -65,6 +68,11 @@ public class DepartmentServiceImplz implements DepartmentService {
             return false;
         }
         return departmentDao.updateDep(department);
+    }
+
+    @Override
+    public Department getDepartmentByName(Department department) {
+        return departmentDao.getDepartmentByName(department);
     }
 
     @Override

@@ -9,5 +9,5 @@ public interface SalaryService {
     boolean updateSalary(Salary salary);
 
     List<Salary> getSalarysByDateAndE_id(Salary salary);
-    List<Salary> getSalaryByTrouble();
+    List<Salary> getSalaryByTroubleAndE_id(Salary salary);
 }

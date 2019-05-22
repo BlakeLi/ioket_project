@@ -12,13 +12,16 @@
         update HRM_SALARY set S_IS_TROUBLE = #{s_is_trouble} where S_ID = #{s_id}
     </update>
     <select id="getSalaryByTrouble" resultType="com.ietok.project.entity.Salary">
-        select * from HRM_SALARY where S_IS_TROUBLE = 1;
+        select * from HRM_SALARY where S_IS_TROUBLE = 1
     </select>
     <select id="getSalary" resultType="com.ietok.project.entity.Salary">
-        select * from HRM_SALARY where S_ID = #{s_id};
+        select * from HRM_SALARY where S_ID = #{s_id}
     </select>
     <select id="getSalarysByDateAndE_id" resultType="com.ietok.project.entity.Salary">
-        select * from HRM_SALARY where E_ID = #{e_id} and months_between(sysdate,S_DATE)=0
+        select * from HRM_SALARY where E_ID = #{e_id} and S_DATE &lt; LAST_DAY(sysdate)+1 and S_DATE > ADD_MONTHS(LAST_DAY(sysdate)+1,-1)
+    </select>
+    <select id="getSalaryByTroubleAndE_id" resultType="com.ietok.project.entity.Salary">
+        select * from HRM_SALARY where E_ID = #{e_id} and S_IS_TROUBLE = 1
     </select>
 
 </mapper>

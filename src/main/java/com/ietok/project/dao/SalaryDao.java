@@ -10,5 +10,6 @@ public interface SalaryDao {
 
     Salary getSalary(Salary salary);
     List<Salary> getSalarysByDateAndE_id(Salary salary);
+    List<Salary> getSalaryByTroubleAndE_id(Salary salary);
     List<Salary> getSalaryByTrouble();
 }

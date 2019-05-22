@@ -28,9 +28,9 @@ public class SalaryServiceImplz implements SalaryService {
     @Override
     public boolean addSalary(Salary salary) {
         if(salary!=null&&salary.getE_id()!=null){
-            Employee employee = new Employee();
-            employee.setE_id(salary.getE_id());
-            employee = employeeDao.getEmployee(employee);//youwenti
+            Employee emp = new Employee();
+            emp.setE_id(salary.getE_id());
+            Employee employee = employeeDao.getEmployee(emp);
             //社保
             salary.setS_s_insurance(employee.getE_salary()*0.1);
 
@@ -38,6 +38,7 @@ public class SalaryServiceImplz implements SalaryService {
             Reward reward = new Reward();
             reward.setE_id(salary.getE_id());
             List<Reward> rewards = rewardDao.getRewardsByDateAndE_id(reward);
+            salary.setS_reward(0.00);
             for (Reward rw : rewards) {
                 salary.setS_reward(salary.getS_reward()+rw.getR_money());
             }
@@ -45,9 +46,12 @@ public class SalaryServiceImplz implements SalaryService {
             //考勤
             Attendance attendance = new Attendance();
             attendance.setE_id(salary.getE_id());
+            salary.setS_extra(0.00);
             List<Integer> times = attendanceDao.getAttendanceByE_idAndDate(attendance);
-            salary.setS_extra(salary.getS_extra()+(times.size()-22)*50);
+            salary.setS_extra(salary.getS_extra()+(times.size()-22)*20);
 
+            //总额
+            salary.setS_total(0.00);
             salary.setS_total(employee.getE_salary()+salary.getS_performance()+salary.getS_extra()+salary.getS_reward()-salary.getS_s_insurance());
             return salaryDao.addSalary(salary);
         }
@@ -63,7 +67,7 @@ public class SalaryServiceImplz implements SalaryService {
             }else{
                 sly.setS_is_trouble(1);
             }
-            return salaryDao.updateSalary(salary);
+            return salaryDao.updateSalary(sly);
         }
         return false;
     }
@@ -78,7 +82,7 @@ public class SalaryServiceImplz implements SalaryService {
     }
 
     @Override
-    public List<Salary> getSalaryByTrouble() {
-        return salaryDao.getSalaryByTrouble();
+    public List<Salary> getSalaryByTroubleAndE_id(Salary salary) {
+        return salaryDao.getSalaryByTroubleAndE_id(salary);
     }
 }

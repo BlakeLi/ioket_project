@@ -3,6 +3,7 @@ package com.ietok.project.controller;
 import com.ietok.project.entity.*;
 import com.ietok.project.service.service.*;
 import com.ietok.project.util.Method_name;
+import javafx.geometry.Pos;
 import org.omg.PortableInterceptor.INACTIVE;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -36,14 +37,62 @@ public class AdminServlets {
     @Resource
     private CvService cvService;
 
+
+    //查询员工通过POS_ID
+    @RequestMapping("findEmpByPos")
+    @ResponseBody
+    public List<Employee> findEmpByPos(Employee employee){
+        List<Employee> employees = employeeService.getEmployeesByPosID(employee.getPos_id());
+        return employees;
+    }
+
+    //查询Rewards通过E_id
+    @RequestMapping("findRewByEmp")
+    @ResponseBody
+    public List<Reward> findRewardByEmp(Reward reward){
+        List<Reward> rewards = rewardService.getRewardsByE_id(reward);
+        return rewards;
+    }
+
+    //修改员工的岗位
+    @RequestMapping("updateEmpPos")
+    public String updateEmpPos(Employee employee,HttpSession session){
+        Employee emp = employeeService.getEmployee(employee.getE_id());
+        emp.setPos_id(employee.getPos_id());
+        if(employeeService.updateEmployee(emp)){
+            List<Employee> employees = employeeService.getAllEmployee();
+            session.setAttribute("employees",employees);
+        }
+        return "admin";
+    }
+
+    //修改员工的岗位
+    @RequestMapping("updateEmpState")
+    public String updateEmpState(Employee employee,HttpSession session){
+        Employee emp = employeeService.getEmployee(employee.getE_id());
+        emp.setE_state(employee.getE_state());
+        if(employeeService.updateEmployee(emp)){
+            List<Employee> employees = employeeService.getAllEmployee();
+            session.setAttribute("employees",employees);
+        }
+        return "admin";
+    }
+
+    //查询指定人员的复议列表
+    @RequestMapping("findTrouble")
+    @ResponseBody
+    public List<Salary> findTrouble(Salary salary){
+        return salaryService.getSalaryByTroubleAndE_id(salary);
+    }
+
     //修改-薪资-复议状态
     //入参需求S_ID
     @RequestMapping("updateSalary")
     public String updateSalary(Salary salary){
         if(salaryService.updateSalary(salary)){
-            return "WEB-INF/test/success";
+            return "admin";
         }
-        return "WEB-INF/test/fail";
+        return "admin";
     }
 
     //薪资结算
@@ -60,12 +109,12 @@ public class AdminServlets {
                 List<Salary> salaries = salaryService.getSalarysByDateAndE_id(salary);
                 if(salaries.size()==0){
                     if(salaryService.addSalary(salary)){
-                        return "WEB-INF/test/success";
+                        return "admin";
                     }
                 }
             }
         }
-        return "WEB-INF/test/fail";
+        return "admin";
     }
 
     //奖罚记录生成
@@ -118,7 +167,6 @@ public class AdminServlets {
     public String updateFifs(String f_id,String f_date,HttpSession session) throws ParseException {
         Fifs fs = fifsService.getFifsByID(Integer.parseInt(f_id));
         fs.setF_is_accept(1);
-        System.out.println(f_date);
         DateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'hh:mm");
         java.util.Date utilD= format.parse(f_date);
         System.out.println(utilD);
@@ -138,7 +186,6 @@ public class AdminServlets {
         Fifs ffs = fifsService.getFifsByID(Integer.parseInt(f_id));
         ffs.setF_is_read(1);
         if(fifsService.updateFifs(ffs)){
-            System.out.println("已读");
             List<Fifs> fifsList = fifsService.getFifsAll();
             session.setAttribute("fifs",fifsList);
         }
@@ -202,48 +249,73 @@ public class AdminServlets {
         return recruitService.getRecruitByID(recruit);
     }
 
-    //增删改department
-    @RequestMapping("changeDep")
-    public String changeDep(Department department,String method){
-        if (Method_name.DELETE.equals(method)) {
-            if(departmentService.delDep(department)){
-                return "WEB-INF/test/success";
-            }
-        }else if(Method_name.INSERT.equals(method)){
+    //新增部门
+    @RequestMapping("addDep")
+    public String addDep(Department department,HttpSession session){
+        if (departmentService.getDepartmentByName(department)==null) {
             if(departmentService.addDep(department)){
-                return "WEB-INF/test/success";
-            }
-        }else if(Method_name.UPDATE.equals(method)){
-            if(departmentService.updateDep(department)){
-                return "WEB-INF/test/success";
+                List<Department> departments = departmentService.getDepartments();
+                session.setAttribute("department",departments);
             }
         }
-        return "WEB-INF/test/fail";
+        return "admin";
+    }
+    //删除部门
+    @RequestMapping("delDep")
+    public String delDep(Department department,HttpSession session){
+        if(departmentService.delDep(department)){
+            List<Department> departments = departmentService.getDepartments();
+            session.setAttribute("department",departments);
+        }
+        return "admin";
     }
 
-    //增删改position
-    @RequestMapping("changePos")
-    public String changePos(String method, Position position){
-        if (Method_name.DELETE.equals(method)) {
-            if(position.getDep_id()!=null){
-                if(positionService.delPositionByDep(position.getDep_id())){
-                    return "WEB-INF/test/success";
-                }
-            }else if(position.getPos_id()!=null){
-                if(positionService.delPosition(position.getPos_id())){
-                    return "WEB-INF/test/success";
-                }
-            }
-        }else if(Method_name.INSERT.equals(method)){
-            if(positionService.addPosition(position)){
-                return "WEB-INF/test/success";
-            }
-        }else if(Method_name.UPDATE.equals(method)){
-            if(positionService.updatePosition(position)){
-                return "WEB-INF/test/success";
+    //更新部门名称
+    @RequestMapping("updateDep")
+    public String updateDep(Department department,HttpSession session){
+        if (departmentService.getDepartmentByName(department)==null) {
+            if(departmentService.updateDep(department)){
+                List<Department> departments = departmentService.getDepartments();
+                session.setAttribute("department",departments);
             }
         }
-        return "WEB-INF/test/fail";
+        return "admin";
+    }
+
+    //删除职位
+    @RequestMapping("delPos")
+    public String delPos(String pos_id,HttpSession session){
+        Position position = new Position();
+        position.setPos_id(Integer.parseInt(pos_id));
+        if(positionService.delPosition(Integer.parseInt(pos_id))){
+            List<Position> positions = positionService.getAllPosition();
+            session.setAttribute("position",positions);
+        }
+        return "admin";
+    }
+
+    //更新职位
+    @RequestMapping("updatePos")
+    public String updatePos(Position position,HttpSession session){
+        if(positionService.getPositionByNameAndDep(position)==null){
+            if(positionService.updatePosition(position)){
+                List<Position> positions = positionService.getAllPosition();
+                session.setAttribute("position",positions);
+            }
+        }
+        return "admin";
+    }
+
+    //增加职位
+    @RequestMapping("addPos")
+    public String addPos(Position position,HttpSession session){
+        if(positionService.getPositionByNameAndDep(position)==null){
+            if(positionService.addPosition(position)){
+                List<Position> positions =positionService.getAllPosition();
+                session.setAttribute("position",positions);
+            }
+        }
+        return "admin";
     }
 
     //查询department返回Json List

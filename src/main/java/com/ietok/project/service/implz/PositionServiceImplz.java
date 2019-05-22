@@ -59,6 +59,11 @@ public class PositionServiceImplz implements PositionService {
     }
 
     @Override
+    public Position getPositionByNameAndDep(Position position) {
+        return positionDao.getPositionByNameAndDep(position);
+    }
+
+    @Override
     public Position getPositionByID(Position position) {
         if(position==null||position.getPos_id()==null){
             return null;
