@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ietok.project.dao.TrainingPDao">
+    <insert id="addTraining_p">
+        insert into HRM_TRANING_P (E_ID, T_ID) values (#{e_id},#{t_id})
+    </insert>
+</mapper>

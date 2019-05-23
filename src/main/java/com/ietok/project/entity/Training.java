@@ -6,11 +6,20 @@ import java.sql.Date;
 public class Training implements Serializable {
     private Integer t_id;
     private String t_title;
-    private Integer e_id;
     private Date t_start_time;
     private Date t_end_time;
     private String t_address;
     private Integer t_is_publish;
+    private String t_context;
+
+
+    public String getT_context() {
+        return t_context;
+    }
+
+    public void setT_context(String t_context) {
+        this.t_context = t_context;
+    }
 
     public Integer getT_id() {
         return t_id;
@@ -26,14 +35,6 @@ public class Training implements Serializable {
 
     public void setT_title(String t_title) {
         this.t_title = t_title;
-    }
-
-    public Integer getE_id() {
-        return e_id;
-    }
-
-    public void setE_id(Integer e_id) {
-        this.e_id = e_id;
     }
 
     public Date getT_start_time() {
@@ -73,7 +74,6 @@ public class Training implements Serializable {
         return "Training{" +
                 "t_id=" + t_id +
                 ", t_title='" + t_title + '\'' +
-                ", e_id=" + e_id +
                 ", t_start_time=" + t_start_time +
                 ", t_end_time=" + t_end_time +
                 ", t_address='" + t_address + '\'' +

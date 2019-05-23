@@ -38,4 +38,17 @@
     <select id="getAllEmployee" resultType="com.ietok.project.entity.Employee">
         select * from HRM_EMPLOYEE
     </select>
+    <select id="getEmpNotInPos" resultType="com.ietok.project.entity.Employee">
+        select * from HRM_EMPLOYEE where POS_ID NOT IN #{pos_id}
+    </select>
+    <select id="getEmpByDep" resultType="com.ietok.project.entity.Employee">
+        select HRM_EMPLOYEE.E_ID,HRM_EMPLOYEE.E_NAME from HRM_EMPLOYEE,HRM_POSITION,HRM_DEPARTMENT where HRM_EMPLOYEE.POS_ID = HRM_POSITION.POS_ID
+                                                                and HRM_DEPARTMENT.DEP_ID = HRM_POSITION.DEP_ID
+                                                                 and HRM_DEPARTMENT.DEP_ID = #{dep_id}
+    </select>
+    <select id="getEmpNotInDep" resultType="com.ietok.project.entity.Employee">
+        select HRM_EMPLOYEE.E_ID,HRM_EMPLOYEE.E_NAME from HRM_EMPLOYEE,HRM_POSITION,HRM_DEPARTMENT where HRM_EMPLOYEE.POS_ID = HRM_POSITION.POS_ID
+                                                                                                     and HRM_DEPARTMENT.DEP_ID = HRM_POSITION.DEP_ID
+                                                                                                     and HRM_DEPARTMENT.DEP_ID NOT IN #{dep_id}
+    </select>
 </mapper>

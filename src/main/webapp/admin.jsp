@@ -9,6 +9,11 @@
     <link rel="stylesheet" href="bootstrap/css/bootstrap.css">
     <script src="js/jquery-3.1.0.js"></script>
     <script src="bootstrap/js/bootstrap.js"></script>
+    <style>
+        .checkbox-group{
+            width: 70px;
+        }
+    </style>
 </head>
 <body>
 <!--导航栏-->
@@ -371,11 +376,17 @@
                         <option hidden selected value="">请选择人员</option>
                     </select>
                 </div>
-                <table class="table table-hover">
-                    <tbody id="empRewardTab">
-                    </tbody>
+                <table class="table table-hover empRewardTab">
                 </table>
                 <div class="panel-footer">
+                    <form id="RewardAddForm" role="form" class="form-inline form" action="addReward" method="post">
+                        <div class="form-group">
+                            <input type="hidden" class="form-control" name="e_id">
+                            <input type="text" class="form-control" name="r_reason" placeholder="原因" required>
+                            <input type="text" class="form-control" name="r_money" placeholder="金额" required>
+                            <input type="submit" class="form-control btn btn-primary">
+                        </div>
+                    </form>
                 </div>
             </div>
         </div><!--员工奖罚完-->
@@ -383,62 +394,9 @@
         <div class="tab-pane fade" id="employeeAttendance">
             <div class="panel panel-default">
                 <div class="panel-heading">
-                    员工信息
+                    员工考勤
                 </div>
                 <div class="panel-body">
-                    <c:forEach items="${sessionScope.employees}" var="i">
-                        <c:forEach items="${sessionScope.position}" var="j">
-                            <c:if test="${i.pos_id eq j.pos_id}">
-                                <div class="well well-lg col-lg-12">
-                                    <div class="panel panel-primary col-lg-3">员工ID:${i.e_id}</div>
-                                    <div class="panel panel-default col-lg-3">员工姓名:${i.e_name}</div>
-                                    <div class="panel panel-default col-lg-3">员工职位:${j.pos_name}</div>
-                                    <c:choose>
-                                        <c:when test="${i.e_state eq 0}">
-                                            <div class="panel panel-default col-lg-3">员工在职状态:试用期</div>
-                                        </c:when>
-                                        <c:when test="${i.e_state eq 1}">
-                                            <div class="panel panel-default col-lg-3">员工在职状态:在职</div>
-                                        </c:when>
-                                        <c:otherwise>
-                                            <div class="panel panel-default col-lg-3">员工在职状态:离职</div>
-                                        </c:otherwise>
-                                    </c:choose>
-                                    <form role="form" class="form col-lg-6" action="updateEmployeePos" method="post">
-                                        <div class="form-group">
-                                            <label class="control-label">职位:</label>
-                                            <select class="form-control">
-                                            </select>
-                                            <select class="form-control">
-                                                <option value="" hidden selected>请选择职位</option>
-                                            </select>
-                                            <input type="hidden" name="pos_id" value="">
-                                            <input type="hidden" name="e_id" value="${i.e_id}">
-                                        </div>
-                                        <div class="form-group">
-                                            <input type="submit" value="修改职位" class="btn btn-success"/>
-                                        </div>
-                                    </form>
-                                    <form role="form" class="form col-lg-6" action="updateEmployeeState" method="post">
-                                        <div class="form-group">
-                                            <label class="control-label">在职状态:</label>
-                                            <select class="form-control">
-                                                <option value="" hidden selected>请选择在职状态</option>
-                                                <option value="0">试用期</option>
-                                                <option value="1">在职</option>
-                                                <option value="2">离职</option>
-                                            </select>
-                                            <input type="hidden" name="e_state" value="">
-                                            <input type="hidden" name="e_id" value="${i.e_id}">
-                                        </div>
-                                        <div class="form-group">
-                                            <input type="submit" value="修改在职状态" class="btn btn-success"/>
-                                        </div>
-                                    </form>
-                                </div>
-                            </c:if>
-                        </c:forEach>
-                    </c:forEach>
                 </div>
                 <div class="panel-footer">
                 </div>
@@ -584,67 +542,52 @@
             </div>
         </div><!--录用完-->
         <!--培训草稿-->
-        <div class="tab-pane fade" id="trainingWillDo"></div><!--培训草稿完-->
+        <div class="tab-pane fade" id="trainingWillDo">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    未发布的培训
+                </div>
+                <div class="panel-body">
+                    培训草稿信息如下
+                </div>
+                <table class="table table-hover">
+                    <tr>
+                        <td>培训主题</td>
+                        <td>培训内容</td>
+                        <td>地址</td>
+                        <td>开始时间</td>
+                        <td>结束时间</td>
+                    </tr>
+                    <c:forEach items="${sessionScope.u_trainings}" var="i">
+                        <tr>
+                            <td>${i.t_title}</td>
+                            <td>${i.t_context}</td>
+                            <td>${i.t_address}</td>
+                            <td>${i.t_start_time}</td>
+                            <td>${i.t_end_time}</td>
+                            <td>
+                                <button class="btn btn-success" data-toggle="modal" data-target="#trainingChange-modal" data-title="修改草稿" data-t_id="${i.t_id}">修改草稿</button>
+                            </td>
+                            <td>
+                                <button class="btn btn-primary" data-toggle="modal" data-target="#trainingPublish-modal" data-title="发布培训" data-t_id="${i.t_id}">发布培训</button>
+                            </td>
+                            <td>
+                                <a class="btn btn-danger" href="delTraining?t_id=${i.t_id}&t_is_publish=${i.t_is_publish}">删除草稿</a>
+                            </td>
+                        </tr>
+                    </c:forEach>
+                </table>
+                <div class="panel-footer">
+                    <button class="btn btn-primary" data-toggle="modal" data-target="#trainingCreate-modal" data-title="新建招聘信息">编写草稿</button>
+                </div>
+            </div>
+        </div><!--培训草稿完-->
         <!--进行中培训查看-->
         <div class="tab-pane fade" id="trainingDoing"></div><!--进行中培训完-->
         <!--完成的培训-->
         <div class="tab-pane fade" id="trainingDone"></div><!--完成的培训完-->
     </div>
 </div>
-<!--新建招聘模态框-->
-<div class="modal fade" id="recruitPage-modal" role="dialog" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden = "true">&times</span>
-                </button>
-                <h4 class="modal-title"></h4>
-            </div>
-            <div class="modal-body col-lg-12">
-                <form role="form" class="form" action="addRct" method="post">
-                    <div class="form-group col-lg-10 col-lg-offset-1">
-                        <label class="control-label">标题：</label>
-                        <input class="form-control" type="text" name="rct_title" placeholder="请输入一个标题" maxlength="30">
-                    </div>
-                    <div class="form-group col-lg-10 col-lg-offset-1">
-                        <label class="control-label">主要内容:</label>
-                        <textarea class="form-control" name="rct_introduction"></textarea>
-                    </div>
-                    <div class="form-group col-lg-10 col-lg-offset-1">
-                        <label class="control-label">地址:</label>
-                        <input class="form-control" name="rct_address" type="text" placeholder="请输入地址" maxlength="30"/>
-                    </div>
-                    <div class="form-group col-lg-10 col-lg-offset-1">
-                        <label class="control-label">职位:</label>
-                        <select id="dep_id" class="form-control">
-                        </select>
-                        <select id="pos_id" class="form-control">
-                            <option value="" hidden selected>请选择职位</option>
-                        </select>
-                        <input id="pos_id_save" type="hidden" name="pos_id" value="">
-                    </div>
-                    <div class="form-group col-lg-10 col-lg-offset-1">
-                        <label class="control-label">薪资:</label>
-                        <input class="form-control" name="rct_salary" type="number"/>
-                    </div>
-                    <div class="form-group col-lg-10 col-lg-offset-1">
-                        <label class="control-label">联系员工ID:</label>
-                        <input class="form-control" name="e_id" type="number"/>
-                    </div>
-                    <div class="form-group col-lg-10 col-lg-offset-1">
-                        <input class="form-control" name="method" value="insert" type="hidden">
-                    </div>
-                </form>
-                <div class="modal-footer">
-                    <div class="form group">
-                        <input type="submit" id="recruit-submit" class="btn btn-info btn-group-lg btn-group-justified" value="上传招聘草稿"/>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div><!--新建招聘模态框完-->
 <!--简历信息模态框-->
 <div class="modal fade" id="ViewCv-modal" role="dialog" aria-hidden="true">
     <div class="modal-dialog">
@@ -708,7 +651,61 @@
         </div>
     </div>
 </div><!--简历模态框完-->
-<!--修改招聘信息-->
+<!--新建招聘模态框-->
+<div class="modal fade" id="recruitPage-modal" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden = "true">&times</span>
+                </button>
+                <h4 class="modal-title"></h4>
+            </div>
+            <div class="modal-body">
+                <form role="form" class="form" action="addRct" method="post">
+                    <div class="form-group">
+                        <label class="control-label">标题：</label>
+                        <input class="form-control" type="text" name="rct_title" placeholder="请输入一个标题" maxlength="30">
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label">主要内容:</label>
+                        <textarea class="form-control" name="rct_introduction"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label">地址:</label>
+                        <input class="form-control" name="rct_address" type="text" placeholder="请输入地址" maxlength="30"/>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label">职位:</label>
+                        <select id="dep_id" class="form-control">
+                        </select>
+                        <select id="pos_id" class="form-control">
+                            <option value="" hidden selected>请选择职位</option>
+                        </select>
+                        <input id="pos_id_save" type="hidden" name="pos_id" value="">
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label">薪资:</label>
+                        <input class="form-control" name="rct_salary" type="number"/>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label">联系员工ID:</label>
+                        <input class="form-control" name="e_id" type="number"/>
+                    </div>
+                    <div class="form-group">
+                        <input class="form-control" name="method" value="insert" type="hidden">
+                    </div>
+                </form>
+                <div class="modal-footer">
+                    <div class="form group">
+                        <input type="submit" id="recruit-submit" class="btn btn-info btn-group-lg btn-group-justified" value="上传招聘草稿"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div><!--新建招聘模态框完-->
+<!--修改招聘信息模态框-->
 <div class="modal fade" id="recruitChange-modal" role="dialog" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -718,21 +715,21 @@
                 </button>
                 <h4 class="modal-title"></h4>
             </div>
-            <div class="modal-body col-lg-12">
+            <div class="modal-body">
                 <form role="form" class="form" action="updateRct" method="post">
-                    <div class="form-group col-lg-10 col-lg-offset-1">
+                    <div class="form-group">
                         <label class="control-label">标题：</label>
                         <input class="form-control" type="text" name="rct_title" placeholder="请输入一个标题" maxlength="30">
                     </div>
-                    <div class="form-group col-lg-10 col-lg-offset-1">
+                    <div class="form-group">
                         <label class="control-label">主要内容:</label>
                         <textarea class="form-control" name="rct_introduction"></textarea>
                     </div>
-                    <div class="form-group col-lg-10 col-lg-offset-1">
+                    <div class="form-group">
                         <label class="control-label">地址:</label>
                         <input class="form-control" name="rct_address" type="text" placeholder="请输入地址" maxlength="30"/>
                     </div>
-                    <div class="form-group col-lg-10 col-lg-offset-1">
+                    <div class="form-group">
                         <label class="control-label">职位:</label>
                         <select id="dep_id_change" class="form-control">
                         </select>
@@ -744,15 +741,15 @@
                         <input id="rct_id" type="hidden" name="rct_id" value="">
                         <input id="rct_is_draft" type="hidden" name="rct_is_draft" value="">
                     </div>
-                    <div class="form-group col-lg-10 col-lg-offset-1">
+                    <div class="form-group">
                         <label class="control-label">薪资:</label>
                         <input class="form-control" name="rct_salary" type="number"/>
                     </div>
-                    <div class="form-group col-lg-10 col-lg-offset-1">
+                    <div class="form-group">
                         <label class="control-label">联系员工ID:</label>
                         <input class="form-control" name="e_id" type="number"/>
                     </div>
-                    <div class="form-group col-lg-10 col-lg-offset-1">
+                    <div class="form-group">
                         <input class="form-control" name="method" value="insert" type="hidden">
                     </div>
                 </form>
@@ -764,8 +761,8 @@
             </div>
         </div>
     </div>
-</div><!--修改信息模态框完-->
-<!--查看问题薪资记录-->
+</div><!--修改招聘信息模态框完-->
+<!--查看问题薪资记录模态框-->
 <div class="modal fade" id="troubleSalView-modal" role="dialog" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -786,7 +783,134 @@
             </div>
         </div>
     </div>
-</div><!--查看问题薪资记录完-->
+</div><!--查看问题薪资记录模态框完-->
+<!--新建培训模态框-->
+<div class="modal fade" id="trainingCreate-modal" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden = "true">&times</span>
+                </button>
+                <h4 class="modal-title"></h4>
+            </div>
+            <div class="modal-body">
+                <form role="form" class="form" action="addTraining" method="post">
+                    <div class="form-group">
+                        <label class="control-label">标题：</label>
+                        <input class="form-control" type="text" name="t_title" placeholder="请输入一个标题" maxlength="30">
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label">主要内容:</label>
+                        <textarea class="form-control" name="t_context"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label">地址:</label>
+                        <input class="form-control" name="t_address" type="text" placeholder="请输入地址" maxlength="30"/>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label">培训开始时间:</label>
+                        <input class="form-control" name="t_start_time" type="date"/>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label">培训结束时间:</label>
+                        <input class="form-control" name="t_end_time" type="date"/>
+                    </div>
+                </form>
+                <div class="modal-footer">
+                    <div class="form group">
+                        <input type="submit" id="trainingCreate-submit" class="btn btn-info btn-group-lg btn-group-justified" value="上传培训草稿"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div><!--新建培训模态框完-->
+<!--修改培训信息模态框-->
+<div class="modal fade" id="trainingChange-modal" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden = "true">&times</span>
+                </button>
+                <h4 class="modal-title"></h4>
+            </div>
+            <div class="modal-body">
+                <form role="form" class="form" action="updateTraining" method="post">
+                    <input type="hidden" class="form-control" name="t_id">
+                    <div class="form-group">
+                        <label class="control-label">标题：</label>
+                        <input class="form-control" type="text" name="t_title" placeholder="请输入一个标题" maxlength="30">
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label">主要内容:</label>
+                        <textarea class="form-control" name="t_context"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label">地址:</label>
+                        <input class="form-control" name="t_address" type="text" placeholder="请输入地址" maxlength="30"/>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label">培训开始时间:</label>
+                        <input class="form-control" name="t_start_time" type="date"/>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label">培训结束时间:</label>
+                        <input class="form-control" name="t_end_time" type="date"/>
+                    </div>
+                </form>
+                <div class="modal-footer">
+                    <div class="form group">
+                        <input type="submit" id="trainingChange-submit" class="btn btn-info btn-group-lg btn-group-justified" value="上传培训草稿"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div><!--修改培训信息模态框完-->
+<!--发布培训信息模态框-->
+<div class="modal fade" id="trainingPublish-modal" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden = "true">&times</span>
+                </button>
+                <h4 class="modal-title"></h4>
+            </div>
+            <div class="modal-body">
+                <form role="form" class="form" action="updatePublishT" method="post">
+                    <input type="hidden" class="form-control" name="t_id">
+                    <div class="form-group">
+                        <label class="control-label">职位筛选:</label>
+                        <select id="dep_tra" class="form-control">
+                            <option value="" hidden selected>请选择部门</option>
+                            <c:forEach items="${sessionScope.department}" var="i">
+                                <option value="${i.dep_id}">${i.dep_name}</option>
+                            </c:forEach>
+                        </select>
+                        <select id="pos_tra" class="form-control">
+                            <option value="" hidden selected>请选择职位</option>
+                        </select>
+                    </div>
+                    <div class="form-group" data-toggle="buttons">
+                        <c:forEach items="${sessionScope.employees}" var="i">
+                            <label class="btn btn-default checkbox-group" id="e_id${i.e_id}">
+                                <input class="form-control" type="checkbox" value="${i.e_id}" name="e_ids">${i.e_name}
+                            </label>
+                        </c:forEach>
+                    </div>
+                </form>
+                <div class="modal-footer">
+                    <div class="form group">
+                        <input type="submit" id="trainingPublicT-submit" class="btn btn-info btn-group-lg btn-group-justified" value="上传培训"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div><!--修改发布信息模态框完-->
 
 <script>
     $(document).ready(function () {
@@ -862,27 +986,46 @@
         });
 
         $("#emp_reward").on("change",function () {
-           var table = $("#empRewardTab");
+            var table = $(".empRewardTab");
+            $("#RewardAddForm").find("input[name='e_id']").val($(this).val());
             $.ajax({
                 type:"get",
                 url:"findRewByEmp",
                 data:"e_id="+$(this).val(),
                 success:function (data) {
                     table.empty();
-                    var th = table.append("<tr></tr>");
+                    var tableBody = table.append("<tbody></tbody>");
+                    var th =$("<tr></tr>");
+                    tableBody.append(th);
                     th.append("<td>奖惩时间</td>");
                     th.append("<td>奖惩理由</td>");
                     th.append("<td>奖惩金额</td>");
                     for(var i in data){
-                        var tr = table.append("<tr></tr>");
+                        var tr = $("<tr></tr>");
+                        tableBody.append(tr);
                         tr.append("<td>"+data[i]['r_date']+"</td>");
                         tr.append("<td>"+data[i]['r_reason']+"</td>");
                         tr.append("<td>"+data[i]['r_money']+"</td>");
-                        var change = tr.append("<td></td>");
-                        var del = tr.append("<td></td>");
+                        var change = $("<td></td>");
+                        tr.append(change);
+                        var formChange = $("<form role='form' class='form form-inline' action='updateReward' method='post'></form>");
+                        change.append(formChange);
+                        var formChangeDiv = formChange.append("<div class='form-group'></div>");
+                        formChangeDiv.append("<input type='hidden' name='r_id' value='"+data[i]['r_id']+"'>");
+                        formChangeDiv.append("<input type='text' name='r_reason' class='form-control' maxlength='20' placeholder='原因' required>");
+                        formChangeDiv.append("<input type='text' name='r_money' class='form-control' maxlength='4' placeholder='金额' required>");
+                        formChangeDiv.append("<input type='submit' id='rewardChangeDiv_submit' class='form-control btn btn-success' value='修改信息'>");
+                        var del = $("<td></td>");
+                        tr.append(del);
+                        var formDel = $("<form role='form' class='form form-inline' action='delReward' method='post'></form>");
+                        del.append(formDel);
+                        var formDelDiv = formDel.append("<div class='formGroup'></div>");
+                        formDelDiv.append("<input type='hidden' name='r_id' value='"+data[i]['r_id']+"'>");
+                        formDelDiv.append("<input type='submit' id='rewardDelDiv_submit' class='form-control btn btn-danger' value='删除记录' disabled>");
                     }
                 }
             });
+
         });
 
         //员工列表里面的状态变动
@@ -991,7 +1134,7 @@
         });
     });
 
-    //显示招聘信息模态框控制器
+    //显示简历信息模态框控制器
     $("#ViewCv-modal").on("show.bs.modal",function (e) {
         var a = $(e.relatedTarget);
         var title = a.data("title");
@@ -1036,6 +1179,141 @@
     });
 
 </script>
+<!--培训-->
+<script>
+    //新建培训模态框控制器
+    $("#trainingCreate-modal").on("show.bs.modal",function (e) {
+        var a = $(e.relatedTarget);
+        var title = a.data("title");
+        var modal = $(this);
+        modal.find(".modal-title").text(title);
+    });
+
+    //新建招聘按钮上传限定
+    $("#trainingCreate-submit").click(function () {
+        var modal =$("#trainingCreate-modal");
+        var title = modal.find(".modal-body form input[name='t_title']").val();
+        var context = modal.find(".modal-body form input[name='t_context']").val();
+        var address = modal.find(".modal-body form input[name='t_address']").val();
+        var startTime = modal.find(".modal-body form input[name='t_start_time']").val();
+        var endTime = modal.find(".modal-body form input[name='t_end_time']").val();
+        if(title===""||context===""||address===""||startTime===""||endTime===""){
+            return;
+        }
+        modal.find(".modal-body form").submit();
+    });
+
+    //修改培训模态框回显控制器
+    $("#trainingChange-modal").on("show.bs.modal",function (e) {
+        var a = $(e.relatedTarget);
+        var title = a.data("title");
+        var t_id = a.data("t_id");
+        var modal = $(this);
+        var form = modal.find(".modal-body form");
+        modal.find(".modal-title").text(title);
+        modal.find("input[name='t_id']").val(t_id);
+        $.ajax({
+            type:"get",
+            url:"findTra",
+            data:"t_id="+t_id,
+            success:function (date) {
+                form.find("input[name='t_title']").val(date['t_title']);
+                form.find("textarea[name='t_context']").val(date['t_context']);
+                form.find("input[name='t_address']").val(date['t_address']);
+                form.find("input[name='t_start_time']").val(date['t_start_time']);
+                form.find("input[name='t_end_time']").val(date['t_end_time']);
+            }
+        });
+    });
+
+    //修改培训按钮上传限定
+    $("#trainingChange-submit").click(function () {
+        var modal =$("#trainingChange-modal");
+        var title = modal.find(".modal-body form input[name='t_title']").val();
+        var context = modal.find(".modal-body form input[name='t_context']").val();
+        var address = modal.find(".modal-body form input[name='t_address']").val();
+        var startTime = modal.find(".modal-body form input[name='t_start_time']").val();
+        var endTime = modal.find(".modal-body form input[name='t_end_time']").val();
+        var t_id = modal.find(".modal-body form input[name='t_id']").val();
+        if(title===""||context===""||address===""||startTime===""||endTime===""||t_id===""){
+            return;
+        }
+        modal.find(".modal-body form").submit();
+    });
+
+    //上传培训模态框控制器
+    $("#trainingPublish-modal").on("show.bs.modal",function (e) {
+        var a = $(e.relatedTarget);
+        var title = a.data("title");
+        var t_id = a.data("t_id");
+        var modal = $(this);
+        modal.find(".modal-title").text(title);
+        modal.find(".modal-body form input[name='t_id']").val(t_id);
+        $("#dep_tra").on("change",function () {
+            $.ajax({
+                type:"get",
+                url:"findEmpNotInDep",
+                data:"dep_id="+$(this).val(),
+                success:function (data) {
+                    for (var i in data){
+                        $("#e_id"+data[i]['e_id']).css("display","none");
+                    }
+                }
+            });
+            $.ajax({
+                type:"get",
+                url:"findEmpByDep",
+                data:"dep_id="+$(this).val(),
+                success:function (data) {
+                    for (var i in data){
+                        $("#e_id"+data[i]['e_id']).css("display","block");
+                    }
+                }
+            });
+            $.ajax({
+                type:"get",
+                url:"findPos",
+                data:"dep_id="+$(this).val(),
+                success:function (data) {
+                    var position = $("#pos_tra");
+                    position.empty();
+                    position.append("<option value='' hidden selected>请选择职位</option>");
+                    for(var i in data){
+                        position.append("<option value='"+data[i]['pos_id']+"'>"+data[i]['pos_name']+"</option>");
+                    }
+                }
+            });
+        });
+        $("#pos_tra").on("change",function () {
+            $.ajax({
+                type:"get",
+                url:"findEmpNotInPos",
+                data:"pos_id="+$(this).val(),
+                success:function (data) {
+                    for (var i in data){
+                        $("#e_id"+data[i]['e_id']).css("display","none");
+                    }
+                }
+            });
+            $.ajax({
+                type:"get",
+                url:"findEmpByPos",
+                data:"pos_id="+$(this).val(),
+                success:function (data) {
+                    for (var i in data){
+                        $("#e_id"+data[i]['e_id']).css("display","block");
+                    }
+                }
+            });
+        });
+    });
+
+    $("#trainingPublicT-submit").click(function () {
+        var modal =$("#trainingPublish-modal");
+        modal.find(".modal-body form").submit();
+    });
+
+</script><!--培训-->
 <script>
     //部门新增判定
     $("#dep_submit").on("click",function(){

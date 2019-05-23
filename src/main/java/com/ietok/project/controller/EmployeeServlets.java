@@ -25,6 +25,9 @@ public class EmployeeServlets{
     private PositionService positionService;
     @Resource
     private DepartmentService departmentService;
+    @Resource
+    private TrainingService trainingService;
+
 
     //员工和管理员登陆
     @RequestMapping("loginEmployee")
@@ -33,10 +36,13 @@ public class EmployeeServlets{
         List<Employee> employees = employeeService.getAllEmployee();
         List<Position> positions = positionService.getAllPosition();
         List<Department> departments = departmentService.getDepartments();
+        List<Training> trainings = trainingService.getUnpublishTraining();
         session.setAttribute("position",positions);
         session.setAttribute("department",departments);
         session.setAttribute("employee",employee);
         session.setAttribute("employees",employees);
+        session.setAttribute("u_trainings",trainings);
+
         if(employee==null){
             return "index";
         }else if(employee.getE_type()==1){

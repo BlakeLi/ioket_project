@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ietok.project.dao.TrainingDao">
+    <insert id="addT">
+        insert into HRM_TRAINING (T_TITLE, T_START_TIME, T_END_TIME, T_ADDRESS, T_IS_PUBLISH, T_CONTEXT) values (#{t_title},#{t_start_time},#{t_end_time},#{t_address},0,#{t_context})
+    </insert>
+    <update id="updateTraining">
+        update HRM_TRAINING set T_TITLE = #{t_title},
+                                T_START_TIME = #{t_start_time},
+                                T_END_TIME = #{t_end_time},
+                                T_ADDRESS = #{t_address},
+                                T_CONTEXT = #{t_context} where T_ID = #{t_id} and T_IS_PUBLISH = 0
+    </update>
+    <update id="updatePublishT">
+        update HRM_TRAINING set T_IS_PUBLISH = 1 where T_ID = #{t_id}
+    </update>
+    <delete id="delT">
+        delete from HRM_TRAINING where T_ID = #{t_id}
+    </delete>
+    <select id="getUnpublishTraining" resultType="com.ietok.project.entity.Training">
+        select * from HRM_TRAINING where T_IS_PUBLISH = 0
+    </select>
+    <select id="getTraining" resultType="com.ietok.project.entity.Training">
+        select * from HRM_TRAINING where T_id = #{t_id} and T_IS_PUBLISH = 0
+    </select>
+</mapper>

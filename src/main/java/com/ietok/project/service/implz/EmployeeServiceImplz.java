@@ -4,6 +4,7 @@ import com.ietok.project.dao.CvDao;
 import com.ietok.project.dao.EmployeeDao;
 import com.ietok.project.dao.RecruitDao;
 import com.ietok.project.entity.Cv;
+import com.ietok.project.entity.Department;
 import com.ietok.project.entity.Employee;
 import com.ietok.project.entity.Recruit;
 import com.ietok.project.service.service.EmployeeService;
@@ -74,6 +75,21 @@ public class EmployeeServiceImplz implements EmployeeService {
     @Override
     public List<Employee> getEmployeesByPosID(Integer pos_id) {
         return employeeDao.getEmployeesByPosID(pos_id);
+    }
+
+    @Override
+    public List<Employee> getEmpNotInPos(Employee employee) {
+        return employeeDao.getEmpNotInPos(employee);
+    }
+
+    @Override
+    public List<Employee> getEmpNotInDep(Department department) {
+        return employeeDao.getEmpNotInDep(department);
+    }
+
+    @Override
+    public List<Employee> getEmpByDep(Department department) {
+        return employeeDao.getEmpByDep(department);
     }
 
     @Override

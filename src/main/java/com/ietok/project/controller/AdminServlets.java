@@ -37,21 +37,39 @@ public class AdminServlets {
     @Resource
     private CvService cvService;
 
+    //查询不在部门里面的员工
+    @RequestMapping("findEmpNotInDep")
+    @ResponseBody
+    public List<Employee> findEmpNotInDep(Department department){
+        return employeeService.getEmpNotInDep(department);
+    }
+
+    //查询部门员工
+    @RequestMapping("findEmpByDep")
+    @ResponseBody
+    public List<Employee> findEmpByDep(Department department){
+        return employeeService.getEmpByDep(department);
+    }
+
+    //查询员工ID不在POS_ID里面的
+    @RequestMapping("findEmpNotInPos")
+    @ResponseBody
+    public List<Employee> findEmpNotInPos(Employee employee){
+        return employeeService.getEmpNotInPos(employee);
+    }
 
     //查询员工通过POS_ID
     @RequestMapping("findEmpByPos")
     @ResponseBody
     public List<Employee> findEmpByPos(Employee employee){
-        List<Employee> employees = employeeService.getEmployeesByPosID(employee.getPos_id());
-        return employees;
+        return employeeService.getEmployeesByPosID(employee.getPos_id());
     }
 
     //查询Rewards通过E_id
     @RequestMapping("findRewByEmp")
     @ResponseBody
     public List<Reward> findRewardByEmp(Reward reward){
-        List<Reward> rewards = rewardService.getRewardsByE_id(reward);
-        return rewards;
+        return rewardService.getRewardsByE_id(reward);
     }
 
     //修改员工的岗位
@@ -122,18 +140,18 @@ public class AdminServlets {
     @RequestMapping("addReward")
     public String addReward(Reward reward){
         if(rewardService.addReward(reward)){
-            return "WEB-INF/test/success";
+            return "admin";
         }
-        return "WEB-INF/test/fail";
+        return "admin";
     }
 
     //奖罚记录修改
     @RequestMapping("updateReward")
     public String updateReward(Reward reward){
         if(rewardService.updateReward(reward)){
-            return "WEB-INF/test/success";
+            return "admin";
         }
-        return "WEB-INF/test/fail";
+        return "admin";
     }
 
 
