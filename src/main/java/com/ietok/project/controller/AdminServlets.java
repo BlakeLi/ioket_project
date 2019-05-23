@@ -2,9 +2,6 @@ package com.ietok.project.controller;
 
 import com.ietok.project.entity.*;
 import com.ietok.project.service.service.*;
-import com.ietok.project.util.Method_name;
-import javafx.geometry.Pos;
-import org.omg.PortableInterceptor.INACTIVE;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;

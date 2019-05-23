@@ -60,7 +60,7 @@ public class TrainingServlets {
         }
         List<Training_p> training_ps = new ArrayList<>();
         List<Integer> e_ids = new ArrayList<Integer>(Arrays.asList(training_p_choose.getE_ids()));
-        System.out.println(e_ids);
+
         for (Integer e_id : e_ids) {
             Training_p training_p = new Training_p();
             training_p.setE_id(e_id);
@@ -79,7 +79,9 @@ public class TrainingServlets {
         Training training = trainingService.getTraining(tr);
         if(trainingService.updatePublishT(training)){
             List<Training> trainings = trainingService.getUnpublishTraining();
+            List<Training> trainingP = trainingService.getTrainingPublished();
             session.setAttribute("u_trainings",trainings);
+            session.setAttribute("p_trainings",trainingP);
         }
         return "admin";
     }

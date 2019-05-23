@@ -578,14 +578,70 @@
                     </c:forEach>
                 </table>
                 <div class="panel-footer">
-                    <button class="btn btn-primary" data-toggle="modal" data-target="#trainingCreate-modal" data-title="新建招聘信息">编写草稿</button>
+                    <button class="btn btn-primary" data-toggle="modal" data-target="#trainingCreate-modal" data-title="新建培训信息">编写草稿</button>
                 </div>
             </div>
         </div><!--培训草稿完-->
         <!--进行中培训查看-->
-        <div class="tab-pane fade" id="trainingDoing"></div><!--进行中培训完-->
+        <div class="tab-pane fade" id="trainingDoing">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    进行中的培训
+                </div>
+                <div class="panel-body">
+                    <table class="table table-hover">
+                        <tr>
+                            <td>培训ID</td>
+                            <td>培训主题</td>
+                            <td>培训内容</td>
+                            <td>开始时间</td>
+                            <td>结束时间</td>
+                        </tr>
+                        <c:forEach items="${sessionScope.p_trainings}" var="i">
+                            <tr>
+                                <td>${i.t_id}</td>
+                                <td>${i.t_title}</td>
+                                <td>${i.t_context}</td>
+                                <td>${i.t_start_time}</td>
+                                <td>${i.t_end_time}</td>
+                            </tr>
+                        </c:forEach>
+                    </table>
+                </div>
+                <div class="panel-footer">
+                </div>
+            </div>
+        </div><!--进行中培训完-->
         <!--完成的培训-->
-        <div class="tab-pane fade" id="trainingDone"></div><!--完成的培训完-->
+        <div class="tab-pane fade" id="trainingDone">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    已完成的培训
+                </div>
+                <div class="panel-body">
+                    <table class="table table-hover">
+                        <tr>
+                            <td>培训ID</td>
+                            <td>培训主题</td>
+                            <td>培训内容</td>
+                            <td>开始时间</td>
+                            <td>结束时间</td>
+                        </tr>
+                        <c:forEach items="${sessionScope.f_trainings}" var="i">
+                            <tr>
+                                <td>${i.t_id}</td>
+                                <td>${i.t_title}</td>
+                                <td>${i.t_context}</td>
+                                <td>${i.t_start_time}</td>
+                                <td>${i.t_end_time}</td>
+                            </tr>
+                        </c:forEach>
+                    </table>
+                </div>
+                <div class="panel-footer">
+                </div>
+            </div>
+        </div><!--完成的培训完-->
     </div>
 </div>
 <!--简历信息模态框-->

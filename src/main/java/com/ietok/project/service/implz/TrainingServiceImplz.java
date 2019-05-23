@@ -42,4 +42,14 @@ public class TrainingServiceImplz implements TrainingService {
     public Training getTraining(Training training) {
         return trainingDao.getTraining(training);
     }
+
+    @Override
+    public List<Training> getTrainingPublished() {
+        return trainingDao.getTrainingPublished();
+    }
+
+    @Override
+    public List<Training> getTrainingFinished() {
+        return trainingDao.getTrainingFinish();
+    }
 }

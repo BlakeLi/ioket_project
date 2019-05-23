@@ -25,4 +25,10 @@
     <select id="getTraining" resultType="com.ietok.project.entity.Training">
         select * from HRM_TRAINING where T_id = #{t_id} and T_IS_PUBLISH = 0
     </select>
+    <select id="getTrainingPublished" resultType="com.ietok.project.entity.Training">
+        select * from HRM_TRAINING where T_IS_PUBLISH =1 and T_END_TIME > sysdate
+    </select>
+    <select id="getTrainingFinish" resultType="com.ietok.project.entity.Training">
+        select * from HRM_TRAINING where sysdate > T_END_TIME
+    </select>
 </mapper>

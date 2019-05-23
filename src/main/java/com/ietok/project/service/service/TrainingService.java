@@ -15,4 +15,6 @@ public interface TrainingService {
     boolean updatePublishT(Training training);
 
     Training getTraining(Training training);
+    List<Training> getTrainingPublished();
+    List<Training> getTrainingFinished();
 }

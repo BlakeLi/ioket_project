@@ -37,11 +37,15 @@ public class EmployeeServlets{
         List<Position> positions = positionService.getAllPosition();
         List<Department> departments = departmentService.getDepartments();
         List<Training> trainings = trainingService.getUnpublishTraining();
+        List<Training> trainingP = trainingService.getTrainingPublished();
+        List<Training> trainingF = trainingService.getTrainingFinished();
         session.setAttribute("position",positions);
         session.setAttribute("department",departments);
         session.setAttribute("employee",employee);
         session.setAttribute("employees",employees);
         session.setAttribute("u_trainings",trainings);
+        session.setAttribute("p_trainings",trainingP);
+        session.setAttribute("f_trainings",trainingF);
 
         if(employee==null){
             return "index";

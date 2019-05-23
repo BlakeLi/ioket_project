@@ -16,4 +16,8 @@ public interface TrainingDao {
     boolean updatePublishT(Training training);
 
     Training getTraining(Training training);
+
+    List<Training> getTrainingPublished();
+
+    List<Training> getTrainingFinish();
 }
