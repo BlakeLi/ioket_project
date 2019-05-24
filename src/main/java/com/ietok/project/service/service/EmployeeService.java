@@ -17,4 +17,6 @@ public interface EmployeeService {
     List<Employee> getEmpNotInDep(Department department);
     List<Employee> getEmpByDep(Department department);
     List<Employee> getAllEmployee();
+
+    List<Employee> getAllEmployeeInWork();
 }

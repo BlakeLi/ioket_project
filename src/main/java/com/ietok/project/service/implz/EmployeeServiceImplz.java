@@ -96,4 +96,10 @@ public class EmployeeServiceImplz implements EmployeeService {
     public List<Employee> getAllEmployee() {
         return employeeDao.getAllEmployee();
     }
+
+    //h获取所有在职员工
+    @Override
+    public List<Employee> getAllEmployeeInWork() {
+        return employeeDao.getAllEmployeeWork();
+    }
 }

@@ -11,6 +11,6 @@
     <script src="bootstrap/js/bootstrap.js"></script>
 </head>
 <body>
-Employee
+
 </body>
 </html>

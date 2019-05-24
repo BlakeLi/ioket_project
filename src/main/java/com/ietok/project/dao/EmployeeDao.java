@@ -17,4 +17,6 @@ public interface EmployeeDao {
     List<Employee> getEmpByDep(Department department);
     List<Employee> getEmpNotInDep(Department department);
     List<Employee> getAllEmployee();
+
+    List<Employee> getAllEmployeeWork();
 }

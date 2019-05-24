@@ -3,25 +3,40 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ietok.project.dao.AttendanceDao">
-
-    <insert id="addAttendance">
-        insert into HRM_ATTENDANCE (E_ID, ATD_START_TIME)
-                            values (#{e_id},sysdate)
+    <insert id="AutoAddAttendanceAM">
+        insert into HRM_ATTENDANCE (E_ID,ATD_START_INFO,ATD_SYSTEM_TIME) values (#{e_id},#{atd_start_info},sysdate)
     </insert>
-    <update id="updateAttendance">
-        update HRM_ATTENDANCE set ATD_END_TIME = sysdate
-                                  where ATD_ID = #{atd_id}
+    <insert id="AutoAddAttendanceMiss">
+        insert into HRM_ATTENDANCE (E_ID,ATD_START_INFO,ATD_END_INFO,ATD_STATE,ATD_SYSTEM_TIME) values (#{e_id},#{atd_start_info},#{atd_end_info},#{atd_state},sysdate)
+    </insert>
+    <insert id="addAttendance">
+        insert into HRM_ATTENDANCE(E_ID,ATD_START_TIME,ATD_SYSTEM_TIME) values (#{e_id},#{atd_start_time},sysdate)
+    </insert>
+    <update id="updateAttendanceAM">
+        update HRM_ATTENDANCE set ATD_START_INFO = #{atd_start_info}
+        where ATD_ID =#{atd_id}
     </update>
-    <delete id="deleteAttendance">
-        delete from HRM_ATTENDANCE where to_number(ATD_START_TIME-sysdate)=0 and E_ID = #{e_id};
-    </delete>
-    <select id="getAttendance" resultType="com.ietok.project.entity.Attendance">
-        select * from HRM_ATTENDANCE
+    <update id="updateAttendancePM">
+        update HRM_ATTENDANCE set ATD_END_INFO = #{atd_end_info}
+        where ATD_ID =#{atd_id}
+    </update>
+    <update id="updateAttendanceA">
+        update HRM_ATTENDANCE set ATD_START_TIME = sysdate
+        where ATD_ID =#{atd_id}
+    </update>
+    <update id="updateAttendanceP">
+        update HRM_ATTENDANCE set ATD_END_TIME = sysdate
+        where ATD_ID =#{atd_id}
+    </update>
+    <select id="getAttendanceByDateAndEmployee" resultType="com.ietok.project.entity.Attendance">
+        select * from HRM_ATTENDANCE where E_ID = #{e_id}
+        and to_number(to_char(atd_system_time,'DD')) = to_number(to_char(sysdate,'DD'))
+        and to_number(to_char(atd_system_time,'MM')) = to_number(to_char(sysdate,'MM'))
+        and to_number(to_char(atd_system_time,'YY')) = to_number(to_char(sysdate,'YY'))
     </select>
-    <select id="getAttendanceByE_idAndDate" resultType="Integer">
-        select round(to_number(ATD_END_TIME-ATD_START_TIME)*24)+1 from HRM_ATTENDANCE where E_ID = #{e_id} and months_between(sysdate,ATD_START_TIME)=1
-    </select>
-    <select id="getAttendanceByID" resultType="com.ietok.project.entity.Attendance">
-        select * from HRM_ATTENDANCE where to_number(ATD_START_TIME-sysdate)=0 and E_ID = #{e_id};
+    <select id="getAttendanceByE_idAndDate" resultType="com.ietok.project.entity.Attendance">
+        select ATD_ID,E_ID,ATD_START_TIME,ATD_END_TIME from HRM_ATTENDANCE where E_ID = #{e_id}
+        and to_number(to_char(atd_system_time,'YY')) = to_number(to_char(sysdate,'YY'))
+        and to_number(to_char(atd_system_time,'MM'))+1 = to_number(to_char(sysdate,'MM'))
     </select>
 </mapper>

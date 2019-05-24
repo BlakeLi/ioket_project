@@ -51,4 +51,7 @@
                                                                                                      and HRM_DEPARTMENT.DEP_ID = HRM_POSITION.DEP_ID
                                                                                                      and HRM_DEPARTMENT.DEP_ID NOT IN #{dep_id}
     </select>
+    <select id="getAllEmployeeWork" resultType="com.ietok.project.entity.Employee">
+        select * from HRM_EMPLOYEE where E_STATE not in 2
+    </select>
 </mapper>

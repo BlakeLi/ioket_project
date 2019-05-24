@@ -176,6 +176,8 @@
                         <td>招聘信息</td>
                         <td>薪资</td>
                         <td>简历ID</td>
+                        <td>面试时间</td>
+                        <td>面试地址</td>
                     </tr>
                     <c:forEach items="${sessionScope.agreeF}" var="i">
                         <c:forEach items="${sessionScope.p_recruits}" var="j">
@@ -185,6 +187,8 @@
                                     <td>${j.rct_introduction}</td>
                                     <td>薪资：￥${j.rct_salary}/月</td>
                                     <td>${i.cv_id}</td>
+                                    <td>${i.f_date}</td>
+                                    <td>${j.rct_address}</td>
                                     <td>
                                         <a class="agreeCv btn btn-primary" href="agreeFifs?f_id=${i.f_id}&agree=1">同意申请</a>
                                         <a class="cancelCv btn btn-primary" href="agreeFifs?f_id=${i.f_id}&agree=0">取消申请</a>

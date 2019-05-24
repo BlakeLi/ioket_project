@@ -47,8 +47,14 @@ public class SalaryServiceImplz implements SalaryService {
             Attendance attendance = new Attendance();
             attendance.setE_id(salary.getE_id());
             salary.setS_extra(0.00);
-            List<Integer> times = attendanceDao.getAttendanceByE_idAndDate(attendance);
-            salary.setS_extra(salary.getS_extra()+(times.size()-22)*20);
+            List<Attendance> times = attendanceDao.getAttendanceByE_idAndDate(attendance);
+            int count = times.size();
+            for (Attendance time : times) {
+                if(time.getAtd_start_time()==null||time.getAtd_end_time()==null){
+                    count = count - 1;
+                }
+            }
+            salary.setS_extra(salary.getS_extra()+(count-22)*20);
 
             //总额
             salary.setS_total(0.00);
