@@ -1,11 +1,14 @@
 package com.ietok.project.entity;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.sql.Date;
 
 public class Cv implements Serializable {
     private Integer cv_id;
     private Integer c_id;
+    @NotBlank(message = "你好")
     private String cv_name;
     private String cv_gender;
     private Date cv_birth;

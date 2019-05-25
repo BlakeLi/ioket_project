@@ -30,29 +30,42 @@ public class EmployeeServlets{
     private TrainingService trainingService;
     @Resource
     private AttendanceService attendanceService;
-
+    @Resource
+    private SalaryService salaryService;
+    @Resource
+    private RewardService rewardService;
 
     //员工和管理员登陆
     @RequestMapping("loginEmployee")
     public String loginEmployee(String name, String pass, HttpSession session){
         Employee employee = employeeService.getEmployeeByNameAndPass(name,pass);
+        if(employee==null) {
+            return "index";
+        }
+        Salary salary = salaryService.getSalarysByE_idAndDate(employee.getE_id());
         List<Employee> employees = employeeService.getAllEmployee();
         List<Position> positions = positionService.getAllPosition();
         List<Department> departments = departmentService.getDepartments();
         List<Training> trainings = trainingService.getUnpublishTraining();
         List<Training> trainingP = trainingService.getTrainingPublished();
         List<Training> trainingF = trainingService.getTrainingFinished();
+        List<Training> trainingEmp = trainingService.getTrainingPublishedByE_id(employee.getE_id());
+        Reward reward = new Reward();
+        reward.setE_id(employee.getE_id());
+        //通过时间和ID获得上个月的奖惩情况
+        List<Reward> rewards = rewardService.getRewardsByDAndId(employee.getE_id());
         session.setAttribute("position",positions);
         session.setAttribute("department",departments);
         session.setAttribute("employee",employee);
+        session.setAttribute("salaryEmp",salary);
         session.setAttribute("employees",employees);
         session.setAttribute("u_trainings",trainings);
         session.setAttribute("p_trainings",trainingP);
         session.setAttribute("f_trainings",trainingF);
+        session.setAttribute("rewards",rewards);
+        session.setAttribute("trainingEmp",trainingEmp);
 
-        if(employee==null){
-            return "index";
-        }else if(employee.getE_type()==1){
+        if(employee.getE_type()==1){
             List<Cv> cvs = cvService.getAllCvs();
             List<Fifs> fifs = fifsService.getFifsAll();
             List<Recruit> recruits = recruitService.getUnpublishedRecruits();
@@ -91,6 +104,19 @@ public class EmployeeServlets{
             }
         }
 
+        return "employee";
+    }
+
+    //员工薪资复议申请
+    @RequestMapping("troubleApply")
+    public String troubleApply(HttpSession session){
+        Salary salary = (Salary) session.getAttribute("salaryEmp");
+        if(salary!=null){
+            salary.setS_is_trouble(1);//1代表有问题
+            if(salaryService.updateSalary(salary)){
+                session.setAttribute("salaryEmp",salary);
+            }
+        }
         return "employee";
     }
 }

@@ -1,9 +1,11 @@
 package com.ietok.project.entity;
 
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.sql.Date;
 
 public class Employee implements Serializable {
+//    @NotNull(groups = {group_1.class},message = "NIDEHOH")
     private Integer e_id;
     private String e_account;
     private String e_pass;
@@ -17,6 +19,9 @@ public class Employee implements Serializable {
     private Integer e_state;
     private Double e_salary;
     private Integer pos_id;
+//    public interface group_1 {
+//    };
+
 
     public Integer getE_id() {
         return e_id;

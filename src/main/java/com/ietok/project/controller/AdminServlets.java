@@ -2,7 +2,10 @@ package com.ietok.project.controller;
 
 import com.ietok.project.entity.*;
 import com.ietok.project.service.service.*;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -35,7 +38,7 @@ public class AdminServlets {
     private CvService cvService;
 
     //查询不在部门里面的员工
-    @RequestMapping("findEmpNotInDep")
+    @GetMapping("findEmpNotInDep")
     @ResponseBody
     public List<Employee> findEmpNotInDep(Department department){
         return employeeService.getEmpNotInDep(department);
@@ -71,7 +74,7 @@ public class AdminServlets {
 
     //修改员工的岗位
     @RequestMapping("updateEmpPos")
-    public String updateEmpPos(Employee employee,HttpSession session){
+    public String updateEmpPos(Employee employee, HttpSession session){
         Employee emp = employeeService.getEmployee(employee.getE_id());
         emp.setPos_id(employee.getPos_id());
         if(employeeService.updateEmployee(emp)){

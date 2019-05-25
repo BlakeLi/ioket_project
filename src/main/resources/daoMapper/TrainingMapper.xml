@@ -31,4 +31,8 @@
     <select id="getTrainingFinish" resultType="com.ietok.project.entity.Training">
         select * from HRM_TRAINING where sysdate > T_END_TIME
     </select>
+    <select id="getTrainingPublishedByE_id" resultType="com.ietok.project.entity.Training">
+        select T_TITLE,T_START_TIME,T_END_TIME,T_CONTEXT,T_ADDRESS from HRM_TRANING_P,HRM_TRAINING where HRM_TRAINING.T_ID = HRM_TRANING_P.T_ID
+        and E_ID = #{e_id}
+    </select>
 </mapper>

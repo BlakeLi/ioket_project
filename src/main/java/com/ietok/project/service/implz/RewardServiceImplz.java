@@ -57,4 +57,14 @@ public class RewardServiceImplz implements RewardService {
         }
         return null;
     }
+
+    @Override
+    public List<Reward> getRewardsByDAndId(Integer e_id) {
+        if(e_id==null){
+            return null;
+        }
+        Reward reward = new Reward();
+        reward.setE_id(e_id);
+        return rewardDao.getRewardsByDAndID(reward);
+    }
 }

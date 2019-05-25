@@ -91,4 +91,14 @@ public class SalaryServiceImplz implements SalaryService {
     public List<Salary> getSalaryByTroubleAndE_id(Salary salary) {
         return salaryDao.getSalaryByTroubleAndE_id(salary);
     }
+
+    @Override
+    public Salary getSalarysByE_idAndDate(Integer e_id) {
+        if(e_id == null){
+            return null;
+        }
+        Salary salary = new Salary();
+        salary.setE_id(e_id);
+        return salaryDao.getSalaryByE_idAndDate(salary);
+    }
 }

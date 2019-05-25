@@ -10,4 +10,6 @@ public interface SalaryService {
 
     List<Salary> getSalarysByDateAndE_id(Salary salary);
     List<Salary> getSalaryByTroubleAndE_id(Salary salary);
+
+    Salary getSalarysByE_idAndDate(Integer e_id);
 }

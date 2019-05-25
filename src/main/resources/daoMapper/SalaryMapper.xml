@@ -23,5 +23,10 @@
     <select id="getSalaryByTroubleAndE_id" resultType="com.ietok.project.entity.Salary">
         select * from HRM_SALARY where E_ID = #{e_id} and S_IS_TROUBLE = 1
     </select>
+    <select id="getSalaryByE_idAndDate" resultType="com.ietok.project.entity.Salary">
+        select * from HRM_SALARY where E_ID = #{e_id}
+                                   and to_number(to_char(S_DATE,'MM')) = to_number(to_char(sysdate,'MM'))
+                                    and to_number(to_char(S_DATE,'YY')) = to_number(to_char(sysdate,'YY'))
+    </select>
 
 </mapper>

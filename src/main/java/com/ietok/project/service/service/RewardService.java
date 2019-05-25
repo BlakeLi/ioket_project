@@ -12,4 +12,6 @@ public interface RewardService {
     List<Reward> getRewards();
     List<Reward> getRewardsByE_id(Reward reward);
     List<Reward> getRewardsByDateAndE_id(Reward reward);
+
+    List<Reward> getRewardsByDAndId(Integer e_id);
 }

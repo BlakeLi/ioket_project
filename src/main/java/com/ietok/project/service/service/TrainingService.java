@@ -1,5 +1,6 @@
 package com.ietok.project.service.service;
 
+import com.ietok.project.entity.Employee;
 import com.ietok.project.entity.Training;
 
 import java.util.List;
@@ -17,4 +18,6 @@ public interface TrainingService {
     Training getTraining(Training training);
     List<Training> getTrainingPublished();
     List<Training> getTrainingFinished();
+
+    List<Training> getTrainingPublishedByE_id(Integer e_id);
 }

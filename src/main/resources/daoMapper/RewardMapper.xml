@@ -23,4 +23,9 @@
     <select id="getRewardsByDateAndE_id" resultType="com.ietok.project.entity.Reward">
         select * from HRM_REWARD where R_DATE &lt; ADD_MONTHS(LAST_DAY(sysdate)+1,-1) and R_DATE > ADD_MONTHS(LAST_DAY(sysdate)+1,-2) and E_ID = #{e_id}
     </select>
+    <select id="getRewardsByDAndID" resultType="com.ietok.project.entity.Reward">
+        select * from HRM_REWARD where E_ID = #{e_id}
+                                   and to_number(to_char(R_DATE,'MM'))+1 = to_number(to_char(sysdate,'MM'))
+                                   and to_number(to_char(R_DATE,'YY')) = to_number(to_char(sysdate,'YY'))
+    </select>
 </mapper>

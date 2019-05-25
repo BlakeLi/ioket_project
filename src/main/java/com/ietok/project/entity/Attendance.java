@@ -14,6 +14,7 @@ public class Attendance implements Serializable {
     private Date atd_system_time;
 
 
+
     public Integer getAtd_id() {
         return atd_id;
     }

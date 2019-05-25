@@ -3,8 +3,8 @@ package com.ietok.project.controller;
 import com.ietok.project.entity.*;
 import com.ietok.project.service.service.*;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpSession;
@@ -48,7 +48,8 @@ public class CustomerServlets {
 
     //游客登陆控制器
     @RequestMapping("loginCustomer")
-    public String loginCustomer(String name,String pass,HttpSession session){
+//    @RequestParam(required = true,defaultValue = "admin")
+    public String loginCustomer(String name, String pass, HttpSession session){
         Customer customer = customerService.getCustomer(name,pass);
         if(customer!=null&&customer.getC_id()!=null){
             List<Cv> cvs = cvService.getCvs(customer.getC_id());
@@ -83,7 +84,7 @@ public class CustomerServlets {
 
     //简历添加控制器
     @RequestMapping("addCv")
-    public String addCv(Cv cv,HttpSession session){
+    public String addCv(@Validated Cv cv, HttpSession session){
         if(cvService.addCv(cv)){
             Customer customer = (Customer) session.getAttribute("customer");
             List<Cv> cvs = cvService.getCvs(customer.getC_id());
