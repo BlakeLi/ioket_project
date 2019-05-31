@@ -80,4 +80,26 @@ public class AttendanceServiceImplz implements AttendanceService {
         }
         return attendanceDao.updateAttendanceP(attendance);
     }
+
+    @Override
+    public List<Attendance> getAttendanceByEmployee(Integer e_id) {
+        Attendance attendance = new Attendance();
+        attendance.setE_id(e_id);
+        return attendanceDao.getAttendanceByE_id(attendance);
+    }
+
+    @Override
+    public List<Attendance> getAttendanceByMonthAndEmployee(Integer e_id, Integer months) {
+        Attendance attendance = new Attendance();
+        attendance.setE_id(e_id);
+        return attendanceDao.getAttendanceByMonthAndEmployee(attendance,months);
+    }
+
+    @Override
+    public List<Attendance> getAttendanceByMonth(Integer months){
+        if(months==null){
+            return null;
+        }
+        return attendanceDao.getAttendanceByMonth(months);
+    }
 }

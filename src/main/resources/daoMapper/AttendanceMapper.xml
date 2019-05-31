@@ -10,7 +10,7 @@
         insert into HRM_ATTENDANCE (E_ID,ATD_START_INFO,ATD_END_INFO,ATD_STATE,ATD_SYSTEM_TIME) values (#{e_id},#{atd_start_info},#{atd_end_info},#{atd_state},sysdate)
     </insert>
     <insert id="addAttendance">
-        insert into HRM_ATTENDANCE(E_ID,ATD_START_TIME,ATD_SYSTEM_TIME) values (#{e_id},#{atd_start_time},sysdate)
+        insert into HRM_ATTENDANCE(E_ID,ATD_START_TIME,ATD_SYSTEM_TIME) values (#{e_id},sysdate,sysdate)
     </insert>
     <update id="updateAttendanceAM">
         update HRM_ATTENDANCE set ATD_START_INFO = #{atd_start_info}
@@ -38,5 +38,17 @@
         select ATD_ID,E_ID,ATD_START_TIME,ATD_END_TIME from HRM_ATTENDANCE where E_ID = #{e_id}
         and to_number(to_char(atd_system_time,'YY')) = to_number(to_char(sysdate,'YY'))
         and to_number(to_char(atd_system_time,'MM'))+1 = to_number(to_char(sysdate,'MM'))
+    </select>
+    <select id="getAttendanceByE_id" resultType="com.ietok.project.entity.Attendance">
+        select * from HRM_ATTENDANCE where E_ID = #{e_id}
+    </select>
+    <select id="getAttendanceByMonthAndEmployee" resultType="com.ietok.project.entity.Attendance">
+        select * from HRM_ATTENDANCE where E_ID = #{attendance.e_id}
+                                       and to_number(to_char(atd_system_time,'YY')) = to_number(to_char(sysdate,'YY'))
+                                       and to_number(to_char(atd_system_time,'MM')) = #{months}
+    </select>
+    <select id="getAttendanceByMonth" resultType="com.ietok.project.entity.Attendance">
+        select * from HRM_ATTENDANCE where to_number(to_char(atd_system_time,'YY')) = to_number(to_char(sysdate,'YY'))
+                                       and to_number(to_char(atd_system_time,'MM')) = #{months}
     </select>
 </mapper>

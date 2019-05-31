@@ -79,7 +79,7 @@ public class EmployeeServlets{
 
     //打卡系统
     @RequestMapping("checkTime")
-    public String checkTime(HttpSession session){
+    public void checkTime(HttpSession session){
         Date date = new Date(System.currentTimeMillis());
         Employee employee = (Employee) session.getAttribute("employee");
         Attendance attendance = attendanceService.getAttendanceByDateAndEmployee(employee.getE_id());
@@ -103,8 +103,6 @@ public class EmployeeServlets{
                 }
             }
         }
-
-        return "employee";
     }
 
     //员工薪资复议申请

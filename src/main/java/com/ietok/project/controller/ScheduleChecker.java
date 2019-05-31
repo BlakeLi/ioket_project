@@ -25,7 +25,7 @@ public class ScheduleChecker {
     private RewardService rewardService;
 
     //工作日9点零1分点检查是否有今日打卡的记录，如果有标记为正常如果没有新生成一条记录，标记为迟到
-    @Scheduled(cron = "0 1 9 * * ?")
+    @Scheduled(cron = "0 45 9 * * ?")
     public void AttendanceMorningChecker(){
         Attendance attendance;
         List<Employee> employeeList = employeeService.getAllEmployeeInWork();
@@ -49,7 +49,7 @@ public class ScheduleChecker {
 
     //工作日18点零1分检查今天的打卡记录是否有上班打卡时间，
     // 如果没有则旷工，如果有则检查是否有结束时间如果有则表示早退，如果没有则表示正常
-    @Scheduled(cron = "0 1 18 * * ?")
+    @Scheduled(cron = "0 46 17 * * ?")
     public void AttendanceEveningChecker(){
         Attendance attendance;
         List<Employee> employeeList = employeeService.getAllEmployeeInWork();
@@ -112,7 +112,7 @@ public class ScheduleChecker {
                 Reward reward = new Reward();
                 reward.setE_id(employee.getE_id());
                 reward.setR_reason("旷工");
-                reward.setR_money(-100.00);
+                reward.setR_money(-300.00);
                 rewardService.addReward(reward);
             }
         }

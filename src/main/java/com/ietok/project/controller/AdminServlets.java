@@ -2,10 +2,7 @@ package com.ietok.project.controller;
 
 import com.ietok.project.entity.*;
 import com.ietok.project.service.service.*;
-import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Controller;
-import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -36,9 +33,39 @@ public class AdminServlets {
     private RewardService rewardService;
     @Resource
     private CvService cvService;
+    @Resource
+    private AttendanceService attendanceService;
+
+    //员工ID查询考勤
+    @RequestMapping("findATDByE_id")
+    @ResponseBody
+    public List<Attendance> findATDByE_id(String e_id){
+        if(e_id==null||e_id.equals("")){
+            return null;
+        }
+        return attendanceService.getAttendanceByEmployee(Integer.parseInt(e_id));
+    }
+    //员工ID加月份查询考勤
+    @RequestMapping("findATDByE_idAndMonths")
+    @ResponseBody
+    public List<Attendance> findATDByE_idAndMonths(String e_id, String months){
+        if(e_id==null||e_id.equals("")||months==null){
+            return null;
+        }
+        return attendanceService.getAttendanceByMonthAndEmployee(Integer.parseInt(e_id),Integer.parseInt(months));
+    }
+    //月份查看考勤
+    @RequestMapping("findATDByMonths")
+    @ResponseBody
+    public List<Attendance> findATDByMonths(String months){
+        if(months==null||months.equals("")){
+            return null;
+        }
+        return attendanceService.getAttendanceByMonth(Integer.parseInt(months));
+    }
 
     //查询不在部门里面的员工
-    @GetMapping("findEmpNotInDep")
+    @RequestMapping("findEmpNotInDep")
     @ResponseBody
     public List<Employee> findEmpNotInDep(Department department){
         return employeeService.getEmpNotInDep(department);
@@ -327,6 +354,9 @@ public class AdminServlets {
     //增加职位
     @RequestMapping("addPos")
     public String addPos(Position position,HttpSession session){
+        if(position.getDep_id()==null){
+            return "admin";
+        }
         if(positionService.getPositionByNameAndDep(position)==null){
             if(positionService.addPosition(position)){
                 List<Position> positions =positionService.getAllPosition();

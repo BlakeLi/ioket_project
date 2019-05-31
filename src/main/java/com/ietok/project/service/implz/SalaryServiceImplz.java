@@ -48,6 +48,7 @@ public class SalaryServiceImplz implements SalaryService {
             attendance.setE_id(salary.getE_id());
             salary.setS_extra(0.00);
             List<Attendance> times = attendanceDao.getAttendanceByE_idAndDate(attendance);
+            System.out.println(times);
             int count = times.size();
             for (Attendance time : times) {
                 if(time.getAtd_start_time()==null||time.getAtd_end_time()==null){

@@ -140,7 +140,7 @@
                                     <td>薪资：￥${i.rct_salary}/月</td>
                                     <td>${j.pos_name}</td>
                                     <td>
-                                        <button class="btn btn-success" data-toggle="modal" data-target="#recruitChange-modal" data-title="修改草稿" data-rct_id="${i.rct_id}">修改草稿</button>
+                                        <button class="btn btn-success" data-toggle="modal" data-target="#recruitChange-modal" data-title="修改草稿" data-rct_id="${i.rct_id}" data-pos_id="${i.pos_id}">修改草稿</button>
                                     </td>
                                     <td>
                                         <a class="btn btn-primary" href="publishRecruit?rct_id=${i.rct_id}">发布招聘</a>
@@ -182,10 +182,10 @@
                                 <form role="form" class="form form-inline dep_update_form" method="post" action="updateDep">
                                     <div class="form-group">
                                         <input type="hidden" name="dep_id" value="${i.dep_id}">
-                                        <input class="form-control dep_update_name" type="text" name="dep_name" placeholder="修改部门名称,请输入" maxlength="30">
+                                        <input class="form-control dep_update_name" type="text" name="dep_name" placeholder="修改部门名称,请输入" maxlength="30" required>
                                     </div>
                                     <div class="form-group">
-                                        <button class="form-control btn btn-success dep_update_submit">修改部门名称</button>
+                                        <input type="submit" class="form-control btn btn-success dep_update_submit" value="修改部门名称">
                                     </div>
                                 </form>
                             </td>
@@ -206,10 +206,10 @@
                     <form id="dep_add_form" role="form" class="form form-inline" method="post" action="addDep">
                         <div class="form-group">
                             <label class="control-label">新部门名称</label>
-                            <input class="form-control" type="text" id="dep_name" name="dep_name" placeholder="请输入一个新部门名称" maxlength="30">
+                            <input class="form-control" type="text" id="dep_name" name="dep_name" placeholder="请输入一个新部门名称" maxlength="30" required>
                         </div>
                         <div class="form-group">
-                            <button class="form-control btn btn-primary" id="dep_submit">新增部门</button>
+                            <input type="submit" class="form-control btn btn-primary" id="dep_submit" value="新增部门">
                         </div>
                     </form>
                 </div>
@@ -241,17 +241,17 @@
                         <div class="form-group">
                             <label class="control-label">新职位名称</label>
                             <input id="pos_dep_id" type="hidden" name="dep_id" value="">
-                            <input class="form-control" type="text" id="pos_name" name="pos_name" placeholder="请输入一个新职位名称" maxlength="30">
+                            <input class="form-control" type="text" id="pos_name" name="pos_name" placeholder="请输入一个新职位名称" maxlength="30" required>
                         </div>
                         <div class="form-group">
-                            <button class="form-control btn btn-primary" id="pos_submit">新增职位</button>
+                            <input type="submit" class="form-control btn btn-primary" id="pos_submit" value="新增职位">
                         </div>
                     </form>
                 </div>
             </div>
         </div><!--职位完-->
         <!--员工状态修改-->
-        <div class="tab-pane fade" id="employeeState">
+        <div class="tab-pane fade" id="employeeState" >
             <div class="panel panel-default">
                 <div class="panel-heading">
                     员工信息
@@ -382,9 +382,9 @@
                     <form id="RewardAddForm" role="form" class="form-inline form" action="addReward" method="post">
                         <div class="form-group">
                             <input type="hidden" class="form-control" name="e_id">
-                            <input type="text" class="form-control" name="r_reason" placeholder="原因" required>
-                            <input type="text" class="form-control" name="r_money" placeholder="金额" required>
-                            <input type="submit" class="form-control btn btn-primary">
+                            <input type="text" class="form-control" name="r_reason" placeholder="原因" required maxlength="30">
+                            <input type="text" class="form-control" name="r_money" placeholder="金额" required maxlength="4">
+                            <input id = "add_rewards" type="submit" class="form-control btn btn-primary">
                         </div>
                     </form>
                 </div>
@@ -397,7 +397,27 @@
                     员工考勤
                 </div>
                 <div class="panel-body">
+                    <input id="e_id_atd" name="e_id" placeholder="请输入员工ID"/>
+                    <select id="months_choose" class="form-control">
+                        <option value="" hidden selected>请选择月份</option>
+                        <option value="1">一月</option>
+                        <option value="2">二月</option>
+                        <option value="3">三月</option>
+                        <option value="4">四月</option>
+                        <option value="5">五月</option>
+                        <option value="6">六月</option>
+                        <option value="7">七月</option>
+                        <option value="8">八月</option>
+                        <option value="9">九月</option>
+                        <option value="10">十月</option>
+                        <option value="11">十一月</option>
+                        <option value="12">十二月</option>
+                    </select>
                 </div>
+                <table class="table table-hover">
+                    <tbody id="atd_check_tbody">
+                    </tbody>
+                </table>
                 <div class="panel-footer">
                 </div>
             </div>
@@ -486,7 +506,7 @@
                         <td>查看记录</td>
                     </tr>
                     <c:forEach items="${sessionScope.fifs}" var="i">
-                        <c:if test="${i.f_is_accept eq 0}">
+                        <c:if test="${i.f_is_accept eq 1}">
                             <c:forEach items="${sessionScope.p_recruits}" var="j">
                                 <c:if test="${i.rct_id eq j.rct_id}">
                                     <c:forEach items="${sessionScope.cv}" var="c">
@@ -654,7 +674,7 @@
                 </button>
                 <h4 class="modal-title"></h4>
             </div>
-            <div class="modal-body col-lg-12">
+            <div class="modal-body">
                 <form role="form" class="form" method="post">
                     <div class="form-group col-lg-10 col-lg-offset-1">
                         <label class="control-label">姓名:</label>
@@ -694,7 +714,7 @@
                     </div>
                     <div class="form-group col-lg-10 col-lg-offset-1">
                         <label class="control-label">期望薪资:</label>
-                        <input class="form-control" name="cv_salary" type="number" readonly/>
+                        <input class="form-control" name="cv_salary" type="text" readonly/>
                     </div>
                     <div class="form-group col-lg-10 col-lg-offset-1">
                         <label class="control-label">主要经历</label>
@@ -725,7 +745,7 @@
                     </div>
                     <div class="form-group">
                         <label class="control-label">主要内容:</label>
-                        <textarea class="form-control" name="rct_introduction"></textarea>
+                        <textarea class="form-control" name="rct_introduction" maxlength="250"></textarea>
                     </div>
                     <div class="form-group">
                         <label class="control-label">地址:</label>
@@ -733,12 +753,12 @@
                     </div>
                     <div class="form-group">
                         <label class="control-label">职位:</label>
-                        <select id="dep_id" class="form-control">
+                        <select id="dep_rct" class="form-control">
                         </select>
-                        <select id="pos_id" class="form-control">
+                        <select id="pos_rct" class="form-control">
                             <option value="" hidden selected>请选择职位</option>
                         </select>
-                        <input id="pos_id_save" type="hidden" name="pos_id" value="">
+                        <input id="pos_save_rct" type="hidden" name="pos_id" value="">
                     </div>
                     <div class="form-group">
                         <label class="control-label">薪资:</label>
@@ -779,7 +799,7 @@
                     </div>
                     <div class="form-group">
                         <label class="control-label">主要内容:</label>
-                        <textarea class="form-control" name="rct_introduction"></textarea>
+                        <textarea class="form-control" name="rct_introduction" maxlength="250"></textarea>
                     </div>
                     <div class="form-group">
                         <label class="control-label">地址:</label>
@@ -799,11 +819,11 @@
                     </div>
                     <div class="form-group">
                         <label class="control-label">薪资:</label>
-                        <input class="form-control" name="rct_salary" type="number"/>
+                        <input class="form-control" name="rct_salary" type="text" maxlength="10"/>
                     </div>
                     <div class="form-group">
                         <label class="control-label">联系员工ID:</label>
-                        <input class="form-control" name="e_id" type="number"/>
+                        <input class="form-control" name="e_id" type="text" maxlength="5"/>
                     </div>
                     <div class="form-group">
                         <input class="form-control" name="method" value="insert" type="hidden">
@@ -901,7 +921,7 @@
                     </div>
                     <div class="form-group">
                         <label class="control-label">主要内容:</label>
-                        <textarea class="form-control" name="t_context"></textarea>
+                        <textarea class="form-control" name="t_context" maxlength="250"></textarea>
                     </div>
                     <div class="form-group">
                         <label class="control-label">地址:</label>
@@ -977,17 +997,20 @@
             success:function (data) {
                 var department = $("#dep_id");
                 var emp_dep = $(".emp_dep");
+                var dep_rct = $("#dep_rct")
                 department.empty();
                 emp_dep.empty();
+                dep_rct.empty();
                 department.append("<option value='' hidden selected>请选择部门</option>");
                 emp_dep.append("<option value='' hidden selected>请选择部门</option>");
+                dep_rct.append("<option value='' hidden selected>请选择部门</option>");
                 for(var i in data){
                     department.append("<option value='"+data[i]['dep_id']+"'>"+data[i]['dep_name']+"</option>");
                     emp_dep.append("<option value='"+data[i]['dep_id']+"'>"+data[i]['dep_name']+"</option>");
+                    dep_rct.append("<option value='"+data[i]['dep_id']+"'>"+data[i]['dep_name']+"</option>");
                 }
             }
         });
-
         //员工列表里面的二级联动
         $(".emp_dep").on("change",function(){
             var position = $(this).next();
@@ -1081,6 +1104,14 @@
                     }
                 }
             });
+            $("#rewardChangeDiv_submit").on("click",function () {
+                var reg=/\d/;
+                var money = $(this).prev();
+                if(!reg.test(money.val())){
+                    $(this).attr("onsubmit","return false");
+                }
+                $(this).attr("onsubmit","return true");
+            })
 
         });
 
@@ -1108,6 +1139,26 @@
         });
         $("#pos_id").on("change",function () {
             $("#pos_id_save").val($("#pos_id").val());
+        });
+
+        //新建招聘信息
+        $("#dep_rct").on("change",function () {
+            $.ajax({
+                type:"get",
+                url:"findPos",
+                data:"dep_id="+$(this).val(),
+                success:function (data) {
+                    var position = $("#pos_rct");
+                    position.empty();
+                    position.append("<option value='' hidden selected>请选择职位</option>");
+                    for(var i in data){
+                        position.append("<option value='"+data[i]['pos_id']+"'>"+data[i]['pos_name']+"</option>");
+                    }
+                }
+            });
+        });
+        $("#pos_rct").on("change",function () {
+            $("#pos_save_rct").val($("#pos_rct").val());
         });
 
         //修改招聘信息的二级联动
@@ -1153,6 +1204,7 @@
 
     //新建招聘按钮上传限定
     $("#recruit-submit").click(function () {
+        var reg = /\d/;
         var modal =$("#recruitPage-modal");
         var title = modal.find(".modal-body form input[name='rct_title']").val();
         var introduction = modal.find(".modal-body form input[name='rct_introduction']").val();
@@ -1160,7 +1212,7 @@
         var position = modal.find(".modal-body form input[name='pos_id']").val();
         var salary = modal.find(".modal-body form input[name='rct_salary']").val();
         var e_id = modal.find(".modal-body form input[name='e_id']").val();
-        if(title===""||introduction===""||address===""||position===""||salary===""||e_id===""){
+        if(title===""||introduction===""||address===""||position===""||salary===""||e_id===""||!reg.test(salary)||!reg.test(e_id)){
             return;
         }
         modal.find(".modal-body form").submit();
@@ -1181,7 +1233,7 @@
                 form.find("input[name='rct_title']").val(date['rct_title']);
                 form.find("textarea[name='rct_introduction']").val(date['rct_introduction']);
                 form.find("input[name='rct_address']").val(date['rct_address']);
-                form.find("input[name='pos_id_change']").val(date['pos_id']);
+                $("#pos_id_save_change").val(date['pos_id']);
                 form.find("input[name='rct_id']").val(date['rct_id']);
                 form.find("input[name='rct_is_draft']").val(date['rct_is_draft']);
                 form.find("input[name='rct_salary']").val(date['rct_salary']);
@@ -1219,6 +1271,7 @@
 
     //修改招聘按钮上传限定
     $("#change-submit").click(function () {
+        var reg =/\d/;
         var modal =$("#recruitChange-modal");
         var title = modal.find(".modal-body form input[name='rct_title']").val();
         var introduction = modal.find(".modal-body form textarea[name='rct_introduction']").val();
@@ -1228,7 +1281,7 @@
         var is_draft = modal.find(".modal-body form input[name='rct_is_draft']").val();
         var salary = modal.find(".modal-body form input[name='rct_salary']").val();
         var e_id = modal.find(".modal-body form input[name='e_id']").val();
-        if(title===""||introduction===""||address===""||position===""||salary===""||e_id===""||id===""||is_draft===""){
+        if(title===""||introduction===""||address===""||position===""||salary===""||e_id===""||id===""||is_draft===""||!reg.test(salary)||!reg.test(e_id)){
             return;
         }
         modal.find(".modal-body form").submit();
@@ -1413,7 +1466,7 @@
                         "<input class='form-control pos_update_name' type='text' name='pos_name' placeholder='修改职位名称,请输入' maxlength='30'>" +
                         "</div>" +
                         "<div class='form-group'>" +
-                        "<button class='btn btn-success form-control pos_update_submit'>修改职位ID</button>" +
+                        "<input type='submit' class='btn btn-success form-control pos_update_submit' value='修改职位ID'>" +
                         "</div>" +
                         "</form>" +
                         "</td>" +
@@ -1430,22 +1483,23 @@
                         "</tr>");
                 }
                 //职位修改判定
-                $("#pos_update_submit").on("click",function (){
-                    var form = $(this).parent().parent();
-                    var pos_update_name = form.find(".pos_update_name").val();
-                    if(pos_update_name!==""){
-                        form.submit();
-                    }
-                });
+                // $("#pos_update_submit").on("click",function (){
+                //     var form = $(this).parent().parent();
+                //     var pos_update_name = form.find(".pos_update_name").val();
+                //     if(pos_update_name!==""){
+                //         form.submit();
+                //     }
+                // });
             }
         })
     });
     //职位新增判定
     $("#pos_submit").on("click",function () {
-        var pos_name = $("#pos_name").val();
-        if(pos_name!==""){
-            $("#pos_add_form").submit();
+        var dep_id = $("#pos_dep_id").val();
+        if(dep_id==""){
+            $("#pos_add_form").attr("onsubmit","return false");
         }
+        $("#pos_add_form").attr("onsubmit","return true");
     })
 </script>
 <script>
@@ -1483,6 +1537,153 @@
             }
         });
     });
+</script>
+<!--考勤查看-->
+<script>
+    $("#e_id_atd").on("keyup",function() {
+        var tbody = $("#atd_check_tbody");
+        var reg = /\d/;
+        var months = $("#months_choose").val();
+        if(reg.test($(this).val())&&months===""){
+            $.ajax({
+                type:"get",
+                url:"findATDByE_id",
+                data:"e_id="+$(this).val(),
+                success:function (data) {
+                    tbody.empty();
+                    var th = tbody.append("<tr></tr>");
+                    th.append("<td>员工ID</td>");
+                    th.append("<td>上班打卡时间</td>");
+                    th.append("<td>下班打卡时间</td>");
+                    th.append("<td>状态1</td>");
+                    th.append("<td>状态2</td>");
+                    for(var i in data){
+                        var tr = tbody.append("<tr></tr>");
+                        tr.append("<td>"+data[i]['e_id']+"</td>");
+                        tr.append("<td>"+new Date(data[i]['atd_start_time'])+"</td>");
+                        tr.append("<td>"+new Date(data[i]['atd_end_time'])+"</td>");
+                        if(data[i]['atd_start_info']===1){
+                            tr.append("<td>迟到</td>");
+                        }
+                        if(data[i]['atd_end_info']===1){
+                            tr.append("<td>早退</td>");
+                        }
+                        if(data[i]['atd_state']===1){
+                            tr.append("<td>旷工</td>");
+                        }
+                    }
+                }
+            })
+        }else if(reg.test($(this).val())&&months!==""){
+            $.ajax({
+                type:"get",
+                url:"findATDByE_idAndMonths",
+                data:"e_id="+$(this).val()+"&months="+months,
+                success:function (data) {
+                    tbody.empty();
+                    var th = tbody.append("<tr></tr>");
+                    th.append("<td>员工ID</td>");
+                    th.append("<td>上班打卡时间</td>");
+                    th.append("<td>下班打卡时间</td>");
+                    th.append("<td>状态1</td>");
+                    th.append("<td>状态2</td>");
+                    for(var i in data){
+                        var tr = tbody.append("<tr></tr>");
+                        tr.append("<td>"+data[i]['e_id']+"</td>");
+                        tr.append("<td>"+new Date(data[i]['atd_start_time'])+"</td>");
+                        tr.append("<td>"+new Date(data[i]['atd_end_time'])+"</td>");
+                        if(data[i]['atd_start_info']===1){
+                            tr.append("<td>迟到</td>");
+                        }
+                        if(data[i]['atd_end_info']===1){
+                            tr.append("<td>早退</td>");
+                        }
+                        if(data[i]['atd_state']===1){
+                            tr.append("<td>旷工</td>");
+                        }
+                    }
+                }
+            })
+        }
+    });
+
+    $("#months_choose").on("change",function() {
+        var tbody = $("#atd_check_tbody");
+        var reg = /\d/;
+        var e_id =$("#e_id_atd").val();
+        if(reg.test(e_id)){
+            $.ajax({
+                type:"get",
+                url:"findATDByE_idAndMonths",
+                data:"e_id="+e_id+"&months="+$(this).val(),
+                success:function (data) {
+                    tbody.empty();
+                    var th = tbody.append("<tr></tr>");
+                    th.append("<td>员工ID</td>");
+                    th.append("<td>上班打卡时间</td>");
+                    th.append("<td>下班打卡时间</td>");
+                    th.append("<td>状态1</td>");
+                    th.append("<td>状态2</td>");
+                    for(var i in data){
+                        var tr = tbody.append("<tr></tr>");
+                        tr.append("<td>"+data[i]['e_id']+"</td>");
+                        tr.append("<td>"+new Date(data[i]['atd_start_time'])+"</td>");
+                        tr.append("<td>"+new Date(data[i]['atd_end_time'])+"</td>");
+                        if(data[i]['atd_start_info']===1){
+                            tr.append("<td>迟到</td>");
+                        }
+                        if(data[i]['atd_end_info']===1){
+                            tr.append("<td>早退</td>");
+                        }
+                        if(data[i]['atd_state']===1){
+                            tr.append("<td>旷工</td>");
+                        }
+                    }
+                }
+            })
+        }else if(e_id===""){
+            $.ajax({
+                type:"get",
+                url:"findATDByMonths",
+                data:"months="+$(this).val(),
+                success:function (data) {
+                    tbody.empty();
+                    var th = tbody.append("<tr></tr>");
+                    th.append("<td>员工ID</td>");
+                    th.append("<td>上班打卡时间</td>");
+                    th.append("<td>下班打卡时间</td>");
+                    th.append("<td>状态1</td>");
+                    th.append("<td>状态2</td>");
+                    for(var i in data){
+                        var tr = tbody.append("<tr></tr>");
+                        tr.append("<td>"+data[i]['e_id']+"</td>");
+                        tr.append("<td>"+new Date(data[i]['atd_start_time'])+"</td>");
+                        tr.append("<td>"+new Date(data[i]['atd_end_time'])+"</td>");
+                        if(data[i]['atd_start_info']===1){
+                            tr.append("<td>迟到</td>");
+                        }
+                        if(data[i]['atd_end_info']===1){
+                            tr.append("<td>早退</td>");
+                        }
+                        if(data[i]['atd_state']===1){
+                            tr.append("<td>旷工</td>");
+                        }
+                    }
+                }
+            })
+        }
+    });
+</script><!--考勤查看完-->
+<!--表单验证-->
+<script>
+    $("#add_rewards").on("click",function () {
+        var reg = /\d/;
+        var money = $(this).prev().val();
+        if(!reg.test(money)){
+            $("#RewardAddForm").attr("onsubmit","return false");
+        }
+        $("#RewardAddForm").attr("onsubmit","return true");
+    })
 </script>
 </body>
 </html>

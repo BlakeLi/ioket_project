@@ -13,6 +13,7 @@
         #timeBtn{
             width: 100px;
             height: 100px;
+            border-radius: 50px;
         }
     </style>
 </head>
@@ -35,9 +36,7 @@
 <br/>
 <div class="container">
     <!--考勤打卡-->
-    <div class="panel panel-default">
-        <button class="btn btn-success" id="timeBtn"><p>这是一个打卡按钮</p><div id="time"></div></button>
-    </div>
+    <button class="btn btn-default timeBtn" id="timeBtn"><p><strong>打卡</strong></p></button>
     <br/>
     <br/>
     <br/>
@@ -243,6 +242,16 @@
             }
         });
     });
+
+    $("#timeBtn").on("click",function () {
+        $.ajax({
+            type:"get",
+            url:"checkTime",
+            success:function (data) {
+                alert("打卡成功");
+            }
+        })
+    })
 </script>
 </body>
 </html>

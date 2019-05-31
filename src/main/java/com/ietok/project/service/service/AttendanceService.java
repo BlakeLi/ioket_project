@@ -21,4 +21,10 @@ public interface AttendanceService {
     boolean updateAttendanceA(Attendance attendance);
     //员工晚班打卡
     boolean updateAttendanceP(Attendance attendance);
+
+    List<Attendance> getAttendanceByEmployee(Integer e_id);
+
+    List<Attendance> getAttendanceByMonthAndEmployee(Integer e_id, Integer months);
+
+    List<Attendance> getAttendanceByMonth(Integer months);
 }

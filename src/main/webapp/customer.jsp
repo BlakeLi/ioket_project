@@ -109,11 +109,11 @@
                                     <td>薪资：￥${i.rct_salary}/月</td>
                                     <td>${j.pos_name}</td>
                                     <td>
-                                        <form role="form" class="form" action="addFifs" method="get">
+                                        <form id="changeForm" role="form" class="form" action="addFifs" method="get">
                                             <div class="form-group form-inline">
-                                                <input name="cv_id" class="form-control" type="text" maxlength="3" placeholder="请输入简历ID哦" required/>
+                                                <input id="changeCv_id" name="cv_id" class="form-control" type="text" maxlength="3" placeholder="请输入简历ID哦" required/>
                                                 <input name="rct_id" type="hidden" value="${i.rct_id}"/>
-                                                <input class="changeCvBtn btn btn-primary" type="submit" value="投递简历">
+                                                <input id="changCv" class="changeCvBtn btn btn-primary" type="submit" value="投递简历">
                                             </div>
                                         </form>
                                     </td>
@@ -218,7 +218,7 @@
                 <form role="form" class="form" action="addCv" method="post">
                     <div class="form-group col-lg-10 col-lg-offset-1">
                         <label class="control-label">姓名:</label>
-                        <input class="form-control" type="text" name="cv_name" placeholder="name" required>
+                        <input class="form-control" type="text" name="cv_name" placeholder="name" required maxlength="20">
                     </div>
                     <div class="form-group col-lg-10 col-lg-offset-1" data-toggle="buttons">
                         <label class="genderBtn btn btn-primary active">
@@ -258,11 +258,11 @@
                     </div>
                     <div class="form-group col-lg-10 col-lg-offset-1">
                         <label class="control-label">期望薪资:</label>
-                        <input class="form-control" name="cv_salary" type="number" required/>
+                        <input class="form-control" name="cv_salary" type="text" required maxlength="10"/>
                     </div>
                     <div class="form-group col-lg-10 col-lg-offset-1">
                         <label class="control-label">主要经历</label>
-                        <textarea class="form-control" name="cv_experience" required></textarea>
+                        <textarea class="form-control" name="cv_experience" required maxlength="250"></textarea>
                     </div>
                 </form>
                 <div class="modal-footer">
@@ -330,11 +330,11 @@
                     </div>
                     <div class="form-group col-lg-10 col-lg-offset-1">
                         <label class="control-label">期望薪资:</label>
-                        <input class="form-control" name="cv_salary" type="number" required/>
+                        <input class="form-control" name="cv_salary" type="text" maxlength="10"/>
                     </div>
                     <div class="form-group col-lg-10 col-lg-offset-1">
                         <label class="control-label">主要经历</label>
-                        <textarea class="form-control" name="cv_experience" required></textarea>
+                        <textarea class="form-control" name="cv_experience" required maxlength="250"></textarea>
                     </div>
                 </form>
                 <div class="modal-footer">
@@ -358,7 +358,6 @@
     //简历新增按钮设定
     $("#submit").click(function () {
         var modal =$("#cvPage-modal");
-        var id = modal.find(".modal-body form input[name='cv_id']").val();
         var name = modal.find(".modal-body form input[name='cv_name']").val();
         var birth = modal.find(".modal-body form input[name='cv_birth']").val();
         var address = modal.find(".modal-body form input[name='cv_address']").val();
@@ -369,7 +368,8 @@
         var graduation_date = modal.find(".modal-body form input[name='cv_graduation_date']").val();
         var salary = modal.find(".modal-body form input[name='cv_salary']").val();
         var experience = modal.find(".modal-body form input[name='cv_experience']").val();
-        if(id===""||name===""||birth===""||address===""||school===""||education===""||major===""||enroll_date===""||graduation_date===""||salary===""||experience===""){
+        var reg =/\d/;
+        if(name===""||birth===""||address===""||school===""||education===""||major===""||enroll_date===""||graduation_date===""||salary===""||experience===""||!reg.test(salary)){
             return;
         }
         modal.find(".modal-body form").submit();
@@ -414,11 +414,22 @@
             var graduation_date = modal.find(".modal-body form input[name='cv_graduation_date']").val();
             var salary = modal.find(".modal-body form input[name='cv_salary']").val();
             var experience = modal.find(".modal-body form input[name='cv_experience']").val();
-            if(id===""||name===""||birth===""||address===""||school===""||education===""||major===""||enroll_date===""||graduation_date===""||salary===""||experience===""){
+            var reg =/\d/;
+            if(id===""||name===""||birth===""||address===""||school===""||education===""||major===""||enroll_date===""||graduation_date===""||salary===""||experience===""||!reg.test(salary)){
                 return;
             }
             modal.find(".modal-body form").submit();
         });
+    })
+</script>
+<script>
+    $("#changCv").on("click",function () {
+        var reg = /\d/;
+        var id = $("#changeCv_id").val();
+        if(!reg.test(id)){
+            $("#changeForm").attr("onsubmit","return false");
+        }
+        $("#changeForm").attr("onsubmit","return ture");
     })
 </script>
 </body>

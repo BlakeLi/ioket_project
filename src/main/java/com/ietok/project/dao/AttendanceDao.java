@@ -1,6 +1,7 @@
 package com.ietok.project.dao;
 
 import com.ietok.project.entity.Attendance;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.Date;
 import java.util.List;
@@ -23,4 +24,10 @@ public interface AttendanceDao {
     boolean updateAttendanceA(Attendance attendance);
 
     boolean updateAttendanceP(Attendance attendance);
+
+    List<Attendance> getAttendanceByE_id(Attendance attendance);
+
+    List<Attendance> getAttendanceByMonthAndEmployee(@Param("attendance") Attendance attendance, @Param("months") Integer months);
+
+    List<Attendance> getAttendanceByMonth(@Param("month") Integer months);
 }

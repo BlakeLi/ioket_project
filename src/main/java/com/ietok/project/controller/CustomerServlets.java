@@ -41,9 +41,9 @@ public class CustomerServlets {
     @RequestMapping("registerCustomer")
     public String registerCustomer(String name,String pass){
         if(customerService.addCustomer(name,pass)){
-            return "WEB-INF/test/success";
+            return "index";
         }
-        return "WEB-INF/test/fail";
+        return "index";
     }
 
     //游客登陆控制器
@@ -55,6 +55,7 @@ public class CustomerServlets {
             List<Cv> cvs = cvService.getCvs(customer.getC_id());
             List<Fifs> fifsByC_id = fifsService.getFifsByC_id(customer.getC_id());
             List<Position> positions = positionService.getAllPosition();
+            List<Recruit> recruits = recruitService.getPublishedRecruits();
             List<Fifs> acceptF = new ArrayList<>();
             List<Fifs> agreeF = new ArrayList<>();
             for (Fifs fifs : fifsByC_id) {
@@ -68,6 +69,7 @@ public class CustomerServlets {
             session.setAttribute("customer",customer);
             session.setAttribute("acceptF",acceptF);
             session.setAttribute("agreeF",agreeF);
+            session.setAttribute("p_recruits",recruits);
             session.setAttribute("cvs",cvs);
             return "customer";
         }
@@ -85,6 +87,8 @@ public class CustomerServlets {
     //简历添加控制器
     @RequestMapping("addCv")
     public String addCv(@Validated Cv cv, HttpSession session){
+        Customer c_id = (Customer) session.getAttribute("customer");
+        cv.setC_id(c_id.getC_id());
         if(cvService.addCv(cv)){
             Customer customer = (Customer) session.getAttribute("customer");
             List<Cv> cvs = cvService.getCvs(customer.getC_id());

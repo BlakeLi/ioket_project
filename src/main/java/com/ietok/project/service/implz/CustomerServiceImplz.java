@@ -20,7 +20,7 @@ public class CustomerServiceImplz implements CustomerService {
         }
         Customer customer = new Customer();
         customer.setC_account(name);
-        customer.setC_pass(name);
+        customer.setC_pass(pass);
         return customerDao.addCustomer(customer);
     }
 
